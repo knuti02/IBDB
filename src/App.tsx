@@ -1,7 +1,5 @@
-import BookPreview from "./components/BookPreview";
-
 function App() {
-  return <div>Heisann</div>
+  return <div>Hei!</div>;
 }
 
 export default App;
