@@ -3,7 +3,7 @@ import {collection, getDocs} from "firebase/firestore"
 import { db } from '../firebase';
 
 
-const useFetch = () => {
+export default function useFetch  () {
     const [books, setBooks] = useState([{}])
 
     const getBooks = async () => {
@@ -13,6 +13,7 @@ const useFetch = () => {
         snapShot.forEach((doc) => {
             fetchData.push({...doc.data(), ISBN: doc.id})
         })
+        console.log(fetchData)
         setBooks(fetchData)
     }
 
