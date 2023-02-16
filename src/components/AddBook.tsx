@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import axios from "axios";
-import { collection, addDoc } from "firebase/firestore";
+import { collection, doc, setDoc } from "firebase/firestore";
 import { auth, db } from "../firebase";
 import { Author } from "../types/Author";
 import { Book } from "../types/Book";
@@ -64,7 +64,8 @@ export default function AddBook() {
 
     const submitBook = (book: Book) : void => {
         try {
-           addDoc(collection(db, "books"), { book }); 
+           setDoc(doc(db, "books", book.isbn_13), { book }); 
+           alert(book.isbn_13)
         } catch (error) {
             console.log("Failed to submit to database" + error + "with data" + book);
         }
