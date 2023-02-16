@@ -46,24 +46,29 @@ export default function AddBook() {
                     description: workData.data?.description,
                     author: author,
                     isbn_13: data.isbn_13[0],
-                    isbn_10: data.isbn_10[10],
+                    isbn_10: data.isbn_10[0],
                     coverURL: "https://covers.openlibrary.org/b/isbn/" + data.isbn_13[0] + "-M.jpg",
                     publishDate: new Date(data.publish_date),
                     series: data?.series,
                     numberOfPages: data.number_of_pages,
                     subjects: workData.data?.subjects,
                 }
-                submitBook(data);
+                submitBook(book);
             })
             .catch(function() {
-                console.log("Error");
+                console.log("Catch error");
             });
     }
         
     
 
     const submitBook = (book: Book) : void => {
-        addDoc(collection(db, "books"), book);
+        try {
+           addDoc(collection(db, "books"), { book }); 
+        } catch (error) {
+            console.log("Failed to submit to database" + error + "with data" + book);
+        }
+        
     }
 
     return <div>
