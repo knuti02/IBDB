@@ -1,6 +1,11 @@
-import { expect, afterEach } from "vitest";
+import { expect, afterEach, beforeAll } from "vitest";
 import { cleanup } from "@testing-library/react";
 import matchers from "@testing-library/jest-dom/matchers";
+import { connectFirestoreEmulator } from "firebase/firestore";
+import { connectAuthEmulator } from "firebase/auth";
+import { db } from "../firebase";
+import { auth } from "../firebase";
+
 
 // extends Vitest's expect method with methods from react-testing-library
 expect.extend(matchers);
@@ -9,3 +14,8 @@ expect.extend(matchers);
 afterEach(() => {
   cleanup();
 });
+
+// beforeAll(() => {
+//   connectFirestoreEmulator(db, "http://localhost", 8080);
+//   connectAuthEmulator(auth, "http://localhost:9099");
+// })
