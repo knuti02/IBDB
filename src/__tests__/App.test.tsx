@@ -7,7 +7,7 @@ describe("App", () => {
   it("renders headline", () => {
     render(<App />);
 
-    screen.debug();
+    // screen.debug();
 
     // check if App components renders headline
   });

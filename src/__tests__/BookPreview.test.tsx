@@ -1,17 +1,46 @@
 import { describe, it, expect } from "vitest";
-import { getByAltText, render, screen } from "@testing-library/react";
+import { render, screen } from "@testing-library/react";
 
-import BookPreview from "../components/BookPreview";
+import LandingPageBookList from "../components/LandingPageBookList";
 
-describe("Test BookPreview component", () => {
-  it("Should render BookPreview with passed props", () => {
-    const {getByText} = render(<BookPreview title="Bok1" author="Forfatter1" imageSource="https://cdn.vox-cdn.com/thumbor/p-gGrwlaU4rLikEAgYhupMUhIJc=/0x0:1650x2475/1200x0/filters:focal(0x0:1650x2475):no_upscale()/cdn.vox-cdn.com/uploads/chorus_asset/file/13757614/817BsplxI9L.jpg" />);
-
-    expect(getByText("Bok1")).toBeInTheDocument()
-        expect(getByText("Forfatter1")).toBeInTheDocument()
-        const testImage = document.querySelector("img") as HTMLImageElement;
-        expect(testImage.alt).toContain("Noe feil skjedde")
-
+describe("Test LandingPage component", () => {
+  beforeEach(() => {
+    render(<LandingPageBookList />);
   });
 
+  it("Should render Bok1 with passed props", () => {
+    const images = screen.getAllByRole('img');
+
+    const author = screen.getByText('Jordan B. Peterson');
+    expect(author).toBeInTheDocument();
+
+    const title = screen.getByText('Mer enn bare orden - 12 nye regler for livet');
+    expect(title).toBeInTheDocument();
+
+    expect(images[0]).toHaveAttribute('alt', 'Book cover for Mer enn bare orden - 12 nye regler for livet');
+  });
+
+  it("Should render Bok2 with passed props", () => {
+    const images = screen.getAllByRole('img');
+
+    const author = screen.getByText('Jojo Moyes');
+    expect(author).toBeInTheDocument();
+
+    const title = screen.getByText('I dine sko');
+    expect(title).toBeInTheDocument();
+
+    expect(images[1]).toHaveAttribute('alt', 'Book cover for I dine sko');
+  });
+
+  it("Should render Bok3 with passed props", () => {
+    const images = screen.getAllByRole('img');
+
+    const author = screen.getByText('Camilla Läckberg');
+    expect(author).toBeInTheDocument();
+
+    const title = screen.getByText('Gjøkungen');
+    expect(title).toBeInTheDocument();
+
+    expect(images[2]).toHaveAttribute('alt', 'Book cover for Gjøkungen');
+  });
 });

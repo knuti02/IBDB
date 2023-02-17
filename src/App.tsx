@@ -1,5 +1,8 @@
+import BookPreview from "./components/BookPreview";
+import LandingPage from "./components/LandingPage";
+
 function App() {
-  return <div>Hei!</div>;
+  return <LandingPage/>
 }
 
 export default App;
