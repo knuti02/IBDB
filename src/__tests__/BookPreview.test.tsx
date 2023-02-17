@@ -1,0 +1,46 @@
+import { describe, it, expect } from "vitest";
+import { render, screen } from "@testing-library/react";
+
+import LandingPageBookList from "../components/LandingPageBookList";
+
+describe("Test LandingPage component", () => {
+  beforeEach(() => {
+    render(<LandingPageBookList />);
+  });
+
+  it("Should render Bok1 with passed props", () => {
+    const images = screen.getAllByRole('img');
+
+    const author = screen.getByText('Jordan B. Peterson');
+    expect(author).toBeInTheDocument();
+
+    const title = screen.getByText('Mer enn bare orden - 12 nye regler for livet');
+    expect(title).toBeInTheDocument();
+
+    expect(images[0]).toHaveAttribute('alt', 'Book cover for Mer enn bare orden - 12 nye regler for livet');
+  });
+
+  it("Should render Bok2 with passed props", () => {
+    const images = screen.getAllByRole('img');
+
+    const author = screen.getByText('Jojo Moyes');
+    expect(author).toBeInTheDocument();
+
+    const title = screen.getByText('I dine sko');
+    expect(title).toBeInTheDocument();
+
+    expect(images[1]).toHaveAttribute('alt', 'Book cover for I dine sko');
+  });
+
+  it("Should render Bok3 with passed props", () => {
+    const images = screen.getAllByRole('img');
+
+    const author = screen.getByText('Camilla Läckberg');
+    expect(author).toBeInTheDocument();
+
+    const title = screen.getByText('Gjøkungen');
+    expect(title).toBeInTheDocument();
+
+    expect(images[2]).toHaveAttribute('alt', 'Book cover for Gjøkungen');
+  });
+});
