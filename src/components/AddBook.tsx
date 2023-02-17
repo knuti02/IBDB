@@ -1,97 +1,98 @@
 import React, { useState } from "react";
 import axios from "axios";
-import { collection, doc, setDoc } from "firebase/firestore";
-import { auth, db } from "../firebase";
+import {
+  collection,
+  connectFirestoreEmulator,
+  doc,
+  setDoc,
+} from "firebase/firestore";
+import { db } from "../firebase";
 import { Author } from "../types/Author";
 import { Book } from "../types/Book";
 
 export default function AddBook() {
-    
-    const [bookIsbn, setBookIsbn] = useState("");
-    const [status, setStatus] = useState("")
-    const OPENLIBRARYURL = "https://cors-proxy.htmldriven.com/?url=";
-    
+  const [bookIsbn, setBookIsbn] = useState("");
+  const [status, setStatus] = useState("");
 
-    const fetchBookInfo = async () => {
-        const bookUrl: string =  OPENLIBRARYURL + "https://openlibrary.org/isbn/" + bookIsbn + ".json";
-        setStatus("Henter bokdata...");
-        await fetch("https://openlibrary.org/isbn/" + bookIsbn + ".json")
-            .then(function(response) {
-                return response.json();
-            })
-            .then(async function(data) {
-                let workData;
-                console.log("https://openlibrary.org" + data.works[0].key + ".json")
-                try {
-                    workData = await fetch("https://openlibrary.org" + data.works[0].key + ".json");
-                    console.log(workData)
-                    if (workData == undefined || workData.authors == undefined) {
-                        throw new Error("No work data found");  
-                    }
-                } catch (error) {
-                    console.log(error);
-                    return;
-                }
+  const fetchBookInfo = async (ISBN: string) => {
+    setStatus("Henter bokdata...");
+    return await fetch("https://openlibrary.org/isbn/" + bookIsbn + ".json")
+      .then((response) => {
+        return response.json();
+      })
+      .catch((error) => {
+        console.log("Det skjedde en feil ved henting av bokinfo: " + error);
+      });
+  };
 
-                let author: Author;
-                try {
-                    const authorData = await fetch("https://openlibrary.org" + workData.authors[0].author.key + ".json");
-                    author = {
-                        name: authorData.json().name,
-                        key: authorData.json().key,
-                    }
-                } catch (error) {
-                    console.log(error);
-                    return;
-                }
+  const fetchWorkData = async (workKey: string) => {
+    return await fetch("https://openlibrary.org" + workKey + ".json")
+      .then((result) => {
+        return result.json();
+      })
+      .catch((error) => {
+        console.log("En error oppsto ved henting av workdata: " + error);
+      });
+  };
 
-                let book: Book = {
-                    title: data.title,
-                    description: workData.json()?.description,
-                    author: author,
-                    isbn_13: data.isbn_13[0],
-                    isbn_10: data.isbn_10[0],
-                    coverURL: "https://covers.openlibrary.org/b/isbn/" + data.isbn_13[0] + "-M.jpg",
-                    publishDate: new Date(data.publish_date),
-                    series: data?.series ? data.series : null,
-                    numberOfPages: data.number_of_pages,
-                    subjects: workData.json()?.subjects,
-                }
-                setStatus("Bok lastes opp...")
-                await submitBook(book)
-                setStatus("Bok lagt til")
-            })
-            .catch(function() {
-                console.log("Catch error");
-                setStatus("Error")
-            });
+  const fetchAuthorData = async (authorKey: string) => {
+    return await fetch("https://openlibrary.org" + authorKey + ".json")
+      .then((result) => {
+        return result.json();
+      })
+      .catch((error) => {
+        console.log("En error oppsto ved henting av author data: " + error);
+      });
+  };
+
+  const onUpload = async () => {
+    const bookdata = await fetchBookInfo(bookIsbn);
+    const works = await fetchWorkData(bookdata.works[0].key);
+    const author = await fetchAuthorData(works.authors[0].author.key);
+    let book: Book = {
+      title: bookdata.title,
+      description: works.description,
+      author: author.name,
+      isbn_13: bookdata.isbn_13[0],
+      isbn_10: bookdata.isbn_10[0],
+      coverURL:
+        "https://covers.openlibrary.org/b/isbn/" +
+        bookdata.isbn_13[0] +
+        "-M.jpg",
+      publishDate: new Date(bookdata.publish_date),
+      series: bookdata?.series ? bookdata.series : null,
+      numberOfPages: bookdata.number_of_pages,
+      subjects: works.subjects,
+    };
+    setStatus("Bok lastes opp...");
+    await submitBook(book);
+    setStatus("Bok lagt til");
+  };
+
+  const submitBook = async (book: Book): Promise<void> => {
+    try {
+      await setDoc(doc(db, "books", book.isbn_13), book).then(() =>
+        setStatus("Bok lastet opp!")
+      );
+      setBookIsbn("");
+    } catch (error) {
+      console.log("Failed to submit to database" + error + "with data" + book);
+      setStatus("Bok opplastning feilet");
     }
-        
-    
+  };
 
-    const submitBook = async (book: Book) : Promise<void> => {
-        try {
-           await setDoc(doc(db, "books", book.isbn_13), { book })
-           .then(() => setStatus("Bok lastet opp!"))
-           setBookIsbn("");
-        } catch (error) { 
-            console.log("Failed to submit to database" + error + "with data" + book);
-            setStatus("Bok opplastning feilet")
-            
-        }
-        
-    }
-
-    return <div>
-        <input
-        type="number" 
+  return (
+    <div>
+      <input
+        type="number"
         data-testid="addBookInputField"
         placeholder="Skriv inn ISBN"
         value={bookIsbn}
         onChange={(e) => setBookIsbn(e.currentTarget.value)}
         //TODO valider antall siffer lagt inn
-        />
-        <button onClick={fetchBookInfo}>Add book to database</button>
-        {status.length > 0 && <p>{status}</p>}
+      />
+      <button onClick={onUpload}>Add book to database</button>
+      {status.length > 0 && <p>{status}</p>}
     </div>
+  );
 }

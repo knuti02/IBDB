@@ -6,7 +6,6 @@ import { connectAuthEmulator } from "firebase/auth";
 import { db } from "../firebase";
 import { auth } from "../firebase";
 
-
 // extends Vitest's expect method with methods from react-testing-library
 expect.extend(matchers);
 
@@ -15,7 +14,7 @@ afterEach(() => {
   cleanup();
 });
 
-// beforeAll(() => {
-//   connectFirestoreEmulator(db, "http://localhost", 8080);
-//   connectAuthEmulator(auth, "http://localhost:9099");
-// })
+beforeAll(() => {
+  connectFirestoreEmulator(db, "localhost", 5001);
+  // connectAuthEmulator(auth, "http://localhost:9099");
+});
