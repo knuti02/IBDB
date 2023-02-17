@@ -26,7 +26,7 @@ export default function LandingPageBookList() {
         return (
           <BookPreview
             title={book.title}
-            imageSource={book.img_url}
+            imageSource={book.coverURL}
             author={book.author}
           />
         );

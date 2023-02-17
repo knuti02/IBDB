@@ -1,14 +1,12 @@
-import React from 'react'
-import LandingPageBookList from './LandingPageBookList'
-import LandingPageHeader from './LandingPageHeader'
+import React from "react";
+import LandingPageBookList from "./LandingPageBookList";
+import LandingPageHeader from "./LandingPageHeader";
 
 export default function LandingPage() {
-    console.log("hei")
-
   return (
     <div>
-        <LandingPageHeader />
-        <LandingPageBookList />
+      <LandingPageHeader />
+      <LandingPageBookList />
     </div>
-  )
+  );
 }

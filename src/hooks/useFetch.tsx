@@ -12,7 +12,6 @@ export default function useFetch() {
     snapShot.forEach((doc) => {
       fetchData.push({ ...doc.data(), ISBN: doc.id });
     });
-    console.log(fetchData);
     setBooks(fetchData);
   };
 
