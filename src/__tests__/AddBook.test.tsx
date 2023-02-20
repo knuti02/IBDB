@@ -3,10 +3,15 @@ import { fireEvent, render, screen, waitFor } from "@testing-library/react";
 
 import AddBook from "../components/AddBook";
 import App from "../App";
+import { MemoryRouter } from "react-router-dom";
 
 describe("AddBook", () => {
   it("Renders input field and button", async () => {
-    const { getByTestId, getByText } = render(<AddBook />);
+    const { getByTestId, getByText } = render(
+      <MemoryRouter>
+        <AddBook />
+      </MemoryRouter>
+    );
     const bookInput = getByTestId("addBookInputField");
     fireEvent.change(bookInput, { target: { value: "9780131103627" } });
     const btn = screen.getByRole("button");

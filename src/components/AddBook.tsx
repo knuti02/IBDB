@@ -106,7 +106,7 @@ export default function AddBook() {
       <TextField
         label="Skriv inn ISBN"
         type="number"
-        data-testid="addBookInputField"
+        inputProps={{ "data-testid": "addBookInputField" }}
         error={!inputValid}
         helperText="ISBN må være 10 eller 13 tall"
         fullWidth

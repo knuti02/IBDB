@@ -42,7 +42,7 @@ export default function LandingPageBookList() {
           );
         })}
       <BookPreview
-        title="Mer enn bare orden - 12 nye regler for livet Mer enn bare orden - 12 nye regler for livet"
+        title="Mer enn bare orden - 12 nye regler for livet"
         imageSource="https://www.norli.no/media/catalog/product/9/7/9788205541412_1_2.jpg?auto=webp&format=pjpg&width=960&height=1200&fit=cover"
         author="Jordan B. Peterson"
         ISBN="12345678910"
