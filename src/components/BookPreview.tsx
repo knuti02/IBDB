@@ -37,8 +37,15 @@ export default function BookPreview(props: Props) {
           width={300}
           height={480}
         ></img>
-        <Stack direction="column" width="90%" alignItems="center">
-          <Typography>{title}</Typography>
+        <Stack direction="column" width="100%" alignItems="center">
+          <Typography
+            whiteSpace="nowrap"
+            overflow="hidden"
+            textOverflow="ellipsis"
+            maxWidth="200px"
+          >
+            {title}
+          </Typography>
           <Typography sx={{ fontStyle: "oblique", fontSize: 10 }}>
             {author}
           </Typography>
