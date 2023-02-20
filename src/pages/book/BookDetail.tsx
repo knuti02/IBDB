@@ -35,7 +35,7 @@ export default function BookDetail() {
                 {title}
               </Typography>
               <Typography variant="h4">{author}</Typography>
-              <Typography variant="h6">{description}</Typography>
+              <Typography variant="body1">{description}</Typography>
             </Stack>
           </Stack>
         </Stack>
