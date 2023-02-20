@@ -6,7 +6,7 @@ import { useLocation } from "react-router-dom";
 export default function BookDetail() {
   const location = useLocation();
 
-  const { title, author, img_url } = location.state;
+  const { title, author, imageSource } = location.state;
 
   return (
     <Box boxShadow={4}>
@@ -17,7 +17,7 @@ export default function BookDetail() {
         justifyContent="center"
       >
         <Stack direction="row" alignItems="center" justifyContent="content">
-          <img height="500px" src={img_url} alt="ops" />
+          <img height="500px" src={imageSource} alt="ops" />
           <Stack
             justifyContent="space-evenly"
             alignItems="center"

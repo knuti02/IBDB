@@ -1,11 +1,16 @@
 import { describe, it, expect } from "vitest";
 import { render, screen } from "@testing-library/react";
+import { MemoryRouter } from "react-router-dom";
 
 import LandingPageBookList from "../components/LandingPageBookList";
 
 describe("Test LandingPage component", () => {
   beforeEach(() => {
-    render(<LandingPageBookList />);
+    render(
+      <MemoryRouter>
+        <LandingPageBookList />
+      </MemoryRouter>
+    );
   });
 
   it("Should render Bok1 with passed props", () => {

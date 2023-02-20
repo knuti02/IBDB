@@ -10,12 +10,14 @@ import {
 import Root from "./pages/Root";
 import LandingPage from "./components/LandingPage";
 import Admin from "./pages/admin/Admin";
+import BookDetail from "./pages/book/BookDetail";
 
 const router = createBrowserRouter(
   createRoutesFromElements(
     <Route path="/" element={<Root />}>
       <Route index path="" element={<LandingPage />} />
       <Route path="/admin" element={<Admin />} />
+      <Route path="/books/:id" element={<BookDetail />} />
     </Route>
   )
 );
