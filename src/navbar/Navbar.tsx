@@ -1,7 +1,6 @@
 import * as React from "react";
 import AppBar from "@mui/material/AppBar";
 import { Stack } from "@mui/system";
-import NavElement from "./components/NavElement";
 import { Link } from "react-router-dom";
 import logo from "../assets/Logo_ibdb.png";
 
