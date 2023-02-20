@@ -2,15 +2,7 @@ import { Stack } from "@mui/material";
 import React, { useEffect } from "react";
 import BookPreview from "./BookPreview";
 import useFetch from "../hooks/useFetch";
-import { Author } from "../types/Author";
-
-type Book = {
-  title: string;
-  author: Author;
-  img_url: string;
-  description: string;
-  ISBN: string;
-};
+import { Book } from "../types/Book";
 
 export default function LandingPageBookList() {
   const { getBooks, books } = useFetch();
