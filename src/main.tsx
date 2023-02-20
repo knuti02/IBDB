@@ -8,7 +8,7 @@ import {
   RouterProvider,
 } from "react-router-dom";
 import Root from "./pages/Root";
-import LandingPage from "./components/LandingPage";
+import LandingPage from "./pages/home/LandingPage";
 import Admin from "./pages/admin/Admin";
 import BookDetail from "./pages/book/BookDetail";
 

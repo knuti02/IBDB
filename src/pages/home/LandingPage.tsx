@@ -1,6 +1,6 @@
 import React from "react";
-import LandingPageBookList from "./LandingPageBookList";
-import LandingPageHeader from "./LandingPageHeader";
+import LandingPageBookList from "../../components/LandingPageBookList";
+import LandingPageHeader from "../../components/LandingPageHeader";
 
 export default function LandingPage() {
   return (
