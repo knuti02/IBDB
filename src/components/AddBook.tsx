@@ -48,11 +48,12 @@ export default function AddBook() {
   const onUpload = async () => {
     const bookdata = await fetchBookInfo(bookIsbn);
     const works = await fetchWorkData(bookdata.works[0].key);
-    const author = await fetchAuthorData(works.authors[0].author.key);
+    const author: Author = await fetchAuthorData(works.authors[0].author.key);
+    const { name, key } = author;
     let book: Book = {
       title: bookdata.title,
-      description: works.description,
-      author: author.name,
+      description: works.description.value,
+      author: { name: name, key: key },
       isbn_13: bookdata.isbn_13[0],
       isbn_10: bookdata.isbn_10[0],
       coverURL:

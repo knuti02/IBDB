@@ -6,11 +6,12 @@ type Props = {
   title: string;
   imageSource: string;
   author: string;
+  description: string;
   ISBN: string;
 };
 
 export default function BookPreview(props: Props) {
-  const { title, imageSource, author, ISBN } = props;
+  const { title, imageSource, author, ISBN, description } = props;
   return (
     <Link
       to={`/books/"${ISBN}`}
@@ -21,17 +22,27 @@ export default function BookPreview(props: Props) {
       }}
       state={props}
     >
-      <Stack direction={"column"} alignItems="center" border={1} width={300}>
+      <Stack
+        whiteSpace="nowrap"
+        overflow="hidden"
+        textOverflow="ellipsis"
+        direction={"column"}
+        alignItems="center"
+        border={1}
+        width={300}
+      >
         <img
           src={imageSource}
           alt={`Book cover for ${title}`}
           width={300}
           height={480}
         ></img>
-        <Typography>{title}</Typography>
-        <Typography sx={{ fontStyle: "oblique", fontSize: 10 }}>
-          {author}
-        </Typography>
+        <Stack direction="column" width="90%" alignItems="center">
+          <Typography>{title}</Typography>
+          <Typography sx={{ fontStyle: "oblique", fontSize: 10 }}>
+            {author}
+          </Typography>
+        </Stack>
       </Stack>
     </Link>
   );

@@ -3,7 +3,7 @@ import { collection, getDocs } from "firebase/firestore";
 import { db } from "../firebase";
 
 export default function useFetch() {
-  const [books, setBooks] = useState([{}]);
+  const [books, setBooks] = useState(undefined);
 
   const getBooks = async () => {
     const ref = collection(db, "books");
