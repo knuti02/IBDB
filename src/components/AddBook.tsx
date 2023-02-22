@@ -55,17 +55,17 @@ export default function AddBook() {
       const { name, key } = author;
       let book: Book = {
         title: bookdata.title,
-        description: works.description,
+        description: works.description.value || works.description || "Beskrivelse mangler",
         author: { name: name, key: key },
         isbn_13: bookdata.isbn_13[0],
-        isbn_10: bookdata.isbn_10[0],
+        isbn_10: bookdata.isbn_10 ? bookdata.isbn_10[0] : null,
         coverURL:
           "https:/covers.openlibrary.org/b/isbn/" +
           bookdata.isbn_13[0] +
           "-M.jpg",
         publishDate: new Date(bookdata.publish_date),
         series: bookdata?.series ? bookdata.series : null,
-        numberOfPages: bookdata.number_of_pages,
+        numberOfPages: bookdata.number_of_pages || 0,
         subjects: works.subjects,
       };
       setStatus("Bok lastes opp...");
