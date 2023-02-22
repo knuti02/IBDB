@@ -63,7 +63,7 @@ export default function AddBook() {
         isbn_13: bookdata.isbn_13[0],
         isbn_10: bookdata.isbn_10[0],
         coverURL:
-          "https://covers.openlibrary.org/b/isbn/" +
+          "https:/h/covers.openlibrary.org/b/isbn/" +
           bookdata.isbn_13[0] +
           "-M.jpg",
         publishDate: new Date(bookdata.publish_date),
@@ -97,7 +97,7 @@ export default function AddBook() {
 
   const handleKeyDown = (e: any) => {
     if (e.key === "Enter") {
-      setBookIsbn(e.currentTarget.value);
+      onUpload();
     }
   };
 
