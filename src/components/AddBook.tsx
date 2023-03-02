@@ -1,8 +1,5 @@
 import React, { useState } from "react";
-import axios from "axios";
 import {
-  collection,
-  connectFirestoreEmulator,
   doc,
   setDoc,
 } from "firebase/firestore";
@@ -58,17 +55,17 @@ export default function AddBook() {
       const { name, key } = author;
       let book: Book = {
         title: bookdata.title,
-        description: works.description.value,
+        description: works.description.value || works.description || "Beskrivelse mangler",
         author: { name: name, key: key },
         isbn_13: bookdata.isbn_13[0],
-        isbn_10: bookdata.isbn_10[0],
+        isbn_10: bookdata.isbn_10 ? bookdata.isbn_10[0] : null,
         coverURL:
-          "https://covers.openlibrary.org/b/isbn/" +
+          "https:/covers.openlibrary.org/b/isbn/" +
           bookdata.isbn_13[0] +
           "-M.jpg",
         publishDate: new Date(bookdata.publish_date),
         series: bookdata?.series ? bookdata.series : null,
-        numberOfPages: bookdata.number_of_pages,
+        numberOfPages: bookdata.number_of_pages || 0,
         subjects: works.subjects,
       };
       setStatus("Bok lastes opp...");
@@ -90,14 +87,14 @@ export default function AddBook() {
       );
       setBookIsbn("");
     } catch (error) {
-      console.log("Failed to submit to database" + error + "with data" + book);
-      setStatus("Bok opplastning feilet");
+      console.log("Failed to submit to database " + error + " with data " + book);
+      setStatus("Opplastning av bok feilet");
     }
   };
 
   const handleKeyDown = (e: any) => {
     if (e.key === "Enter") {
-      setBookIsbn(e.currentTarget.value);
+      onUpload();
     }
   };
 
@@ -113,7 +110,6 @@ export default function AddBook() {
         value={bookIsbn}
         onChange={(e) => setBookIsbn(e.currentTarget.value)}
         onKeyDown={handleKeyDown}
-        //TODO valider antall siffer lagt inn
       />
       <Button size="medium" variant="contained" onClick={onUpload}>
         Add book to database
