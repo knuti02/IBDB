@@ -14,12 +14,16 @@ export default function Search () {
 
     const onSubmitSearch = async () => {
         const inputLower = searchInput.toLowerCase();
-        const q = query(booksRef, where("titleLowerCase", ">=", inputLower), where("titleLowerCase", "<=", inputLower+ "\uf8ff"));
-        const querySnapshot = await getDocs(q);
+        const qTitle = query(booksRef, where("titleLowerCase", ">=", inputLower), where("titleLowerCase", "<=", inputLower+ "\uf8ff"));
+        const qAuthor = query(booksRef, where("author.nameLowerCase", ">=", inputLower), where("author.nameLowerCase", "<=", inputLower+ "\uf8ff"));
+        const querySnapshotTitle = await getDocs(qTitle);
+        const querySnapshotAuthor = await getDocs(qAuthor);
         const books:Array<Book> = [];
-        querySnapshot.forEach((doc) => {
+        querySnapshotTitle.forEach((doc) => {
             books.push(doc.data() as Book);
-            // console.log(doc.id, "=>", doc.data())
+        });
+        querySnapshotAuthor.forEach((doc) => {
+            books.push(doc.data() as Book);
         });
         setSearchInput("");
         navigate("/search/" + searchInput, {
