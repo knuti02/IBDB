@@ -6,7 +6,7 @@ export default function SearchResult() {
 
     return (
         <div>
-            <Typography>Søkeresultat: </Typography>
+            <Typography variant="h4">Søkeresultat: </Typography>
         </div>
     )
 }
