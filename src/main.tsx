@@ -11,6 +11,7 @@ import Root from "./pages/Root";
 import LandingPage from "./pages/home/LandingPage";
 import Admin from "./pages/admin/Admin";
 import BookDetail from "./pages/book/BookDetail";
+import Toplists from "./components/Toplists";
 
 const router = createBrowserRouter(
   createRoutesFromElements(
@@ -18,6 +19,7 @@ const router = createBrowserRouter(
       <Route index path="" element={<LandingPage />} />
       <Route path="/admin" element={<Admin />} />
       <Route path="/books/:id" element={<BookDetail />} />
+      <Route path="/toplists" element={<Toplists />} />
     </Route>
   )
 );
