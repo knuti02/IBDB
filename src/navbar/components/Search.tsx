@@ -3,19 +3,30 @@ import { TextField, Stack, IconButton } from "@mui/material";
 import SearchIcon from '@mui/icons-material/Search';
 import { db } from "../../firebase";
 import { collection, query, where, getDocs } from "firebase/firestore";
+import { useNavigate } from "react-router-dom";
+import { Book } from "../../types/Book";
 
 export default function Search () {
+    const navigate = useNavigate();
     const [searchInput, setSearchInput] = useState("");
 
     const booksRef = collection(db, "books");
 
     const onSubmitSearch = async () => {
-        const q = query(booksRef, where("title", ">=", searchInput), where("title", "<=", searchInput+ "\uf8ff"));
+        const inputLower = searchInput.toLowerCase();
+        const q = query(booksRef, where("titleLowerCase", ">=", inputLower), where("titleLowerCase", "<=", inputLower+ "\uf8ff"));
         const querySnapshot = await getDocs(q);
+        const books:Array<Book> = [];
         querySnapshot.forEach((doc) => {
-            console.log(doc.id, "=>", doc.data())
+            books.push(doc.data() as Book);
+            // console.log(doc.id, "=>", doc.data())
         });
         setSearchInput("");
+        navigate("/search/" + searchInput, {
+            state: {
+                searchResult: books
+            }
+        });
     }
 
     const handleKeyDown = (e: any) => {
