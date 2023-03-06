@@ -7,6 +7,7 @@ import TextField from '@mui/material/TextField';
 import Button from '@mui/material/Button';
 import Stack from '@mui/material/Stack';
 import styled from '@emotion/styled';
+import { useNavigate } from 'react-router-dom';
 
 
 const Form = styled(Stack)`
@@ -27,16 +28,18 @@ const SuccessText = styled.p`
   font-size: 12px;
 `;
 
-
 const LoginPage = () => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [status, setStatus] = useState("");
 
+  const navigate = useNavigate()
+
   const logIn = async () => {
     try {
       await signInWithEmailAndPassword(auth, email, password);
       setStatus('Signed in successfully!');
+      navigate("/")
       // Redirect the user to the main page once signed in
       // You can use React Router for this or any other method you prefer
     } catch (error) {
