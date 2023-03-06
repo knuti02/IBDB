@@ -12,6 +12,7 @@ import LandingPage from "./pages/home/LandingPage";
 import Admin from "./pages/admin/Admin";
 import BookDetail from "./pages/book/BookDetail";
 import SignUpPage from "./components/SignUpPage";
+import LoginPage from "./components/LoginPage";
 
 const router = createBrowserRouter(
   createRoutesFromElements(
@@ -20,6 +21,7 @@ const router = createBrowserRouter(
       <Route path="/admin" element={<Admin />} />
       <Route path="/books/:id" element={<BookDetail />} />
       <Route path="/signup" element={<SignUpPage />} />
+      <Route path="/login" element= {<LoginPage />} />
     </Route>
   )
 );
