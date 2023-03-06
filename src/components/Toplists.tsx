@@ -2,6 +2,7 @@ import { Stack } from '@mui/system';
 import React, { useEffect } from 'react'
 import { Book } from '../types/Book';
 import BookPreview from './BookPreview';
+import GenreToplists from './GenreToplists';
 
 export default function Toplists() {
     
@@ -14,10 +15,13 @@ export default function Toplists() {
         .then(response => response.json())
             .then(data => data.results.lists)
               .then((unSortedFetchData) => {
+                console.log(unSortedFetchData);
+                unSortedFetchData.forEach((list)=>{
 
-                unSortedFetchData.forEach((list)=>{ 
+                  let bookList : {listName : string, listOfBooks : Array<Book>} = {listName: list.list_name, listOfBooks: []};
+
                   list.books.forEach((book)=>{
-                    sortedFetchData.push({ 
+                    bookList.listOfBooks.push({ 
                       title: book.title,
                       author: {name: book.author, key: ""},
                       description: book.description,
@@ -31,8 +35,11 @@ export default function Toplists() {
                     })
                   });
 
-                  setFetchData(sortedFetchData);
-              })
+                  sortedFetchData.push(bookList);
+
+                })
+                
+                setFetchData(sortedFetchData);
     
       })        
 
@@ -40,22 +47,16 @@ export default function Toplists() {
 
   return (
     <Stack
-    padding="16px"
-    justifyContent="center"
-    direction="row"
-    flexWrap="wrap"
-    gap={2}
+      direction = "column"
+      spacing= {4}
+      padding = '16px'
   >
     
     {fetchData.length > 0 &&
-      fetchData.map((book: Book) => {
+      fetchData.map((bookList : any) => {
         return (
-          <><BookPreview
-          title={book.title}
-          imageSource={book.coverURL}
-          author={book.author.name}
-          ISBN={book.isbn_13}
-          description={book.description}
+          <><GenreToplists listName={bookList.listName} listOfBooks = {bookList.listOfBooks}          
+          key = {bookList.listName + bookList.listOfBooks.length}
         />
         </>
         );
