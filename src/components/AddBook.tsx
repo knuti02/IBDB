@@ -55,8 +55,9 @@ export default function AddBook() {
       const { name, key } = author;
       let book: Book = {
         title: bookdata.title,
+        titleLowerCase: bookdata.title.toLowerCase(),
         description: works.description.value || works.description || "Beskrivelse mangler",
-        author: { name: name, key: key },
+        author: { name: name, nameLowerCase: name.toLowerCase(), key: key },
         isbn_13: bookdata.isbn_13[0],
         isbn_10: bookdata.isbn_10 ? bookdata.isbn_10[0] : null,
         coverURL:

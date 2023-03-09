@@ -1,11 +1,13 @@
 import { useState, useEffect } from 'react';
 import { auth } from '../firebase';
 import { onAuthStateChanged, signInWithEmailAndPassword, signOut } from 'firebase/auth';
-import AppBar from '@mui/material/AppBar';
-import Stack from '@mui/material/Stack';
 import { Link, useNavigate } from 'react-router-dom';
 import logo from "../assets/Logo_ibdb.png"
 import { Button } from '@mui/material';
+import * as React from "react";
+import AppBar from "@mui/material/AppBar";
+import { Stack } from "@mui/system";
+import Search from "./components/Search"
 
 function Navbar() {
   const [user, setUser] = useState(null);
@@ -39,7 +41,7 @@ function Navbar() {
       <Stack
         marginLeft="10px"
         alignItems="center"
-        justifyContent="start"
+        justifyContent="space-between"
         direction={"row"}
         height="70px"
         spacing={3}
@@ -66,6 +68,9 @@ function Navbar() {
           null
         }
       
+        )
+      }
+        <Search />
       </Stack>
     </AppBar>
   );
