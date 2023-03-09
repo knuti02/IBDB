@@ -1,12 +1,33 @@
-import { Typography } from "@mui/material";
+import { Button, FormControl, Rating, Tab, Tabs, TextareaAutosize, Typography } from "@mui/material";
 import { Box, Stack } from "@mui/system";
+import { TabPanel, TabContext, TabList, TabPanelClassKey} from "@mui/lab";
 import React, { useEffect, useState } from "react";
 import { useLocation } from "react-router-dom";
+import ReviewBox from "../../components/ReviewBox";
 
 export default function BookDetail() {
   const location = useLocation();
 
   const { title, author, imageSource, description } = location.state;
+  let [tabValue, setTabValue] = useState("0")
+  let [ratingValue, setRatingValue] = useState(0)
+  let [buttonValue, setButtonValue] = useState(true)
+
+  const handleTabChange = () => {
+    if (tabValue == "0") {
+      setTabValue("1")
+    }
+    else {
+      setTabValue("0")
+    }
+  }
+
+  const handleRatingChange = (event: Event) => {
+    // ratingValue.setRatingValue(event.target.value)
+    // if (ratingValue != 0) {
+    //   setButtonValue(false)
+    // }
+  }
 
   return (
     <Box boxShadow={4}>
@@ -39,6 +60,71 @@ export default function BookDetail() {
             </Stack>
           </Stack>
         </Stack>
+
+        <FormControl>
+          <Rating 
+            name="bookRating"
+            value={ratingValue}
+            // onChange={handleRatingChange()}
+          />
+          <TextareaAutosize
+            minRows={4}
+            style = {{ width: 550 }}
+            aria-label="Book review"
+            placeholder="Review..."
+          />
+          <Button disabled={buttonValue}>
+            Submit
+          </Button>
+        </FormControl>
+
+        <TabContext value={String(tabValue)}> 
+          <Box sx= {{ borderBottom: 1, borderColor: "divider"}}>
+            <TabList onChange={handleTabChange}>
+              <Tab label="Verified reviews" value="0" />
+              <Tab label="User reviews" value="1" />
+            </TabList>
+          </Box>
+          <TabPanel value="0">
+            <ReviewBox
+              userName= {"Amalie"}
+              rating = {5}
+              text = "Jeg likte boken"
+            / >
+            <ReviewBox
+              userName= {"Erik"}
+              rating = {4}
+              text = "Fakker lowkey med boka as"
+            / >
+            <ReviewBox
+              userName= {"Kjetil"}
+              rating = {3}
+              text = "Jeg likte boken"
+            / >  
+          </TabPanel>
+          <TabPanel value="1">
+           <ReviewBox
+              userName= {"Armands"}
+              rating = {1}
+              text = "Jeg hater boken"
+            / >
+            <ReviewBox
+              userName= {"Tirza"}
+              rating = {2}
+              text = "Jeg likte ikke boken"
+            / >
+            <ReviewBox
+              userName= {"Lukas"}
+              rating = {5}
+              text = "Grov bok as"
+            / >  
+            <ReviewBox
+              userName= {"Knut"}
+              rating = {5}
+              text = "Fin bok"
+            / > 
+          </TabPanel>
+        </TabContext>
       </Stack>
     </Box>
   );
