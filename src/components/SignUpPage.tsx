@@ -5,6 +5,7 @@ import TextField from '@mui/material/TextField';
 import Button from '@mui/material/Button';
 import Stack from '@mui/material/Stack';
 import styled from '@emotion/styled';
+import { Box } from '@mui/material';
 
 const Form = styled(Stack)`
   padding: 16px;
@@ -65,35 +66,42 @@ const SignUpPage = () => {
   };
 
   return (
-    <Form direction="row" spacing={2} justifyContent="space-between">
-      <TextField
-        label="Email"
-        type="email"
-        inputProps={{ "data-testid": "emailInputField" }}
-        variant="outlined"
-        error={!inputValid}
-        helperText={!inputValid ? "Invalid email format" : ""}
-        fullWidth
-        value={email}
-        onChange={(e) => setEmail(e.currentTarget.value)}
-      />
-      <TextField
-        label="Password"
-        type="password"
-        inputProps={{ "data-testid": "passwordInputField" }}
-        variant="outlined"
-        error={!inputValid}
-        helperText={!inputValid ? "Password must be at least 8 characters" : ""}
-        fullWidth
-        value={password}
-        onChange={(p) => setPassword(p.currentTarget.value)}
-        onKeyDown={handleKeyDown}
-      />
-      <Button variant="contained" onClick={addUser}>
-        Add User
-      </Button>
-      {status.length > 0 && (status === "Bruker lagt til" ? <SuccessText>{status}</SuccessText> : <ErrorText>{status}</ErrorText>)}
-    </Form>
+    <Box justifyContent="center" alignItems="center" width="100%" height="100%">
+
+      <Form justifyContent="center" alignItems="center"  direction="row" spacing={2} border={1}>
+        <Stack justifyContent="center" alignItems="center">
+          <TextField
+            style = {{paddingBottom: "10px"}}
+            label="Email"
+            type="email"
+            inputProps={{ "data-testid": "emailInputField" }}
+            variant="outlined"
+            error={!inputValid}
+            helperText={!inputValid ? "Invalid email format" : ""}
+            fullWidth
+            value={email}
+            onChange={(e) => setEmail(e.currentTarget.value)}
+          />
+          <TextField
+            style = {{paddingBottom: "10px"}}
+            label="Password"
+            type="password"
+            inputProps={{ "data-testid": "passwordInputField" }}
+            variant="outlined"
+            error={!inputValid}
+            helperText={!inputValid ? "Password must be at least 8 characters" : ""}
+            fullWidth
+            value={password}
+            onChange={(p) => setPassword(p.currentTarget.value)}
+            onKeyDown={handleKeyDown}
+          />
+          <Button variant="contained" onClick={addUser}>
+            Add User
+          </Button>
+          {status.length > 0 && (status === "Bruker lagt til" ? <SuccessText>{status}</SuccessText> : <ErrorText>{status}</ErrorText>)}
+        </Stack>
+      </Form>
+    </Box>
   );
 }
 
