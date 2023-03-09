@@ -13,6 +13,9 @@ export default function Search () {
     const booksRef = collection(db, "books");
 
     const onSubmitSearch = async () => {
+        if (searchInput === "" || searchInput === " ") {
+            return;
+        }
         const inputLower = searchInput.toLowerCase();
         const qTitle = query(booksRef, where("titleLowerCase", ">=", inputLower), where("titleLowerCase", "<=", inputLower+ "\uf8ff"));
         const qAuthor = query(booksRef, where("author.nameLowerCase", ">=", inputLower), where("author.nameLowerCase", "<=", inputLower+ "\uf8ff"));
