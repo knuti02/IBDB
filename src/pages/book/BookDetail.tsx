@@ -10,21 +10,24 @@ export default function BookDetail() {
 
   const { title, author, imageSource, description } = location.state;
   let [tabValue, setTabValue] = useState("0");
-  let [ratingValue, setRatingValue] = useState(0);
+  let [ratingValue, setRatingValue] = useState<number | null>(null);
   let [buttonValue, setButtonValue] = useState(true);
 
   const handleTabChange = () => {
     if (tabValue == "0") {
-      setTabValue("1");
+      setTabValue("1")
     } else {
-      setTabValue("0");
+      setTabValue("0")
     }
   };
 
   const handleRatingChange = (_: Event, value: number) => {
+    console.log(ratingValue)
     setRatingValue(value);
-    if (ratingValue != 0) {
-      setButtonValue(false);
+    if (value == null) {
+      setButtonValue(true)
+    } else {
+      setButtonValue(false)
     }
   };
 
@@ -45,7 +48,7 @@ export default function BookDetail() {
         </Stack>
 
         <FormControl>
-          <Rating name="bookRating" value={ratingValue} onChange={handleRatingChange} />
+          <Rating size="large" name="bookRating" value={ratingValue} onChange={handleRatingChange} />
           <TextareaAutosize minRows={4} style={{ width: 550 }} aria-label="Book review" placeholder="Review..." />
           <Button disabled={buttonValue}>Submit</Button>
         </FormControl>
