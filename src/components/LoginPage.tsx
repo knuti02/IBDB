@@ -8,6 +8,7 @@ import Button from '@mui/material/Button';
 import Stack from '@mui/material/Stack';
 import styled from '@emotion/styled';
 import { useNavigate } from 'react-router-dom';
+import { Box } from '@mui/material';
 
 
 const Form = styled(Stack)`
@@ -32,6 +33,7 @@ const LoginPage = () => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [status, setStatus] = useState("");
+  const [admin, setAdmin] = useState(false)
 
   const navigate = useNavigate()
 
@@ -39,6 +41,9 @@ const LoginPage = () => {
     try {
       await signInWithEmailAndPassword(auth, email, password);
       setStatus('Signed in successfully!');
+      if (email == "admin@admin.admin") {
+        setAdmin(true)
+      }
       navigate("/")
       // Redirect the user to the main page once signed in
       // You can use React Router for this or any other method you prefer
@@ -49,31 +54,44 @@ const LoginPage = () => {
     }
   };
 
+  const handleKeyDown = (e: any) => {
+    if (e.key === "Enter") {
+      logIn();
+    }
+  }
+
   return (
-    <Form direction="row" spacing={2} justifyContent="space-between">
-      <TextField
-        label="Email"
-        type="email"
-        inputProps={{ "data-testid": "emailInputField" }}
-        variant="outlined"
-        fullWidth
-        value={email}
-        onChange={(e) => setEmail(e.currentTarget.value)}
-      />
-      <TextField
-        label="Password"
-        type="password"
-        inputProps={{ "data-testid": "passwordInputField" }}
-        variant="outlined"
-        fullWidth
-        value={password}
-        onChange={(p) => setPassword(p.currentTarget.value)}
-      />
-      <Button variant="contained" onClick={logIn}>
-        Log-in
-      </Button>
-      {status && <p>{status}</p>}
-    </Form>
+    <Box justifyContent="center" alignItems="center" width="100%" height="100%">
+      <Form justifyContent="center" alignItems="center" direction="row" spacing={2} border={1}>
+        <Stack justifyContent="center" alignItems="center">
+          <TextField
+            style = {{paddingBottom: "10px"}}
+            label="Email"
+            type="email"
+            inputProps={{ "data-testid": "emailInputField" }}
+            variant="outlined"
+            fullWidth
+            value={email}
+            onChange={(e) => setEmail(e.currentTarget.value)}
+          />
+          <TextField
+            style = {{paddingBottom: "10px"}}
+            label="Password"
+            type="password"
+            inputProps={{ "data-testid": "passwordInputField" }}
+            variant="outlined"
+            fullWidth
+            value={password}
+            onChange={(p) => setPassword(p.currentTarget.value)}
+            onKeyDown={handleKeyDown}
+          />
+          <Button variant="contained" onClick={logIn}>
+            Log-in
+          </Button>
+          {status && <p>{status}</p>}
+        </Stack>
+      </Form>
+    </Box>
   );
 }
   
