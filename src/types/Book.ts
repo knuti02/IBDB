@@ -2,6 +2,7 @@ import { Author } from "./Author";
 
 export type Book = {
     title: string;
+    titleLowerCase: string;
     author: Author;
     description: string;
     publishDate: Date;
