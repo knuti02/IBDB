@@ -5,14 +5,23 @@ import React, { useEffect, useState } from "react";
 import { useLocation } from "react-router-dom";
 import ReviewBox from "../../components/ReviewBox";
 import useAuth from "../../hooks/useAuth";
+import { collection, addDoc, query, where } from "firebase/firestore";
+import { db } from "../../firebase";
+import { Margin } from "@mui/icons-material";
 
 export default function BookDetail() {
   const location = useLocation();
+  const [reviews, setReviews] = useState([]);
+  useEffect(() => {
+    const q = query(collection(db, "reviews"), where("book", "==", location.state.ISBN));
+
+  }, []);
 
   const { title, author, imageSource, description } = location.state;
   let [tabValue, setTabValue] = useState("0");
   let [ratingValue, setRatingValue] = useState<number | null>(null);
   let [buttonValue, setButtonValue] = useState(true);
+  let [review, setReview] = useState("");
 
   const { userData } = useAuth();
 
@@ -36,6 +45,23 @@ export default function BookDetail() {
     }
   };
 
+  const handleSubmit = async () => {
+    try {
+      await addDoc(collection(db, "reviews"), {
+        rating: ratingValue,
+        reviewText: review,
+        book: location.state.ISBN
+      });
+      setReview("");
+      setRatingValue(null);
+      setButtonValue(true);
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
+
+
   return (
     <Box boxShadow={4} p="16px">
       <Stack width="100%" height="720px" alignItems="center">
@@ -54,8 +80,15 @@ export default function BookDetail() {
 
         <FormControl>
           <Rating size="large" name="bookRating" value={ratingValue} onChange={handleRatingChange} />
-          <TextareaAutosize minRows={4} style={{ width: 550 }} aria-label="Book review" placeholder="Review..." />
-          <Button disabled={buttonValue}>Submit</Button>
+          <TextareaAutosize 
+            minRows={4} 
+            style={{ width: 550 }} 
+            aria-label="Book review" 
+            placeholder="Review..." 
+            value={review}
+            onChange={(e) => setReview(e.currentTarget.value)}
+            />
+          <Button disabled={buttonValue} variant="outlined" sx={{marginTop:"10px", width:"30%", marginLeft:"auto", marginRight:"auto"}} onClick={handleSubmit}>Submit</Button>
         </FormControl>
 
         <TabContext value={String(tabValue)}>
