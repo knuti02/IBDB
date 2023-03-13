@@ -8,11 +8,14 @@ import * as React from "react";
 import AppBar from "@mui/material/AppBar";
 import { Stack } from "@mui/system";
 import Search from "./components/Search"
+import { useDispatch } from 'react-redux';
+import { setUserData } from '../redux/userData';
 
 function Navbar() {
   const [user, setUser] = useState(null);
   const [admin, setAdmin] = useState(false)
   const navigate = useNavigate()
+  const dispatch = useDispatch();
 
   function logOut(auth) {
     signOut(auth);
@@ -24,6 +27,10 @@ function Navbar() {
     const unsubscribe = onAuthStateChanged(auth, (user) => {
       if (auth.currentUser?.uid == "kdoILYYTDuWy1izQOTauJxP2rDw1") { //check if its the admins user id
         setAdmin(true)
+      dispatch(setUserData({...user, isAdmin: true}))
+      } else {
+        dispatch(setUserData({...user, isAdmin: false}))
+
       }
       setUser(user);
     });
