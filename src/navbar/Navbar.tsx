@@ -55,21 +55,20 @@ function Navbar() {
           <img src={logo} alt="error under lasting av logo" width="100px" />
         </Link>
         {user ? (
-          <Button onClick={() => logOut(auth)}>Sign out</Button>
+          <Button variant="outlined" onClick={() => logOut(auth)}>Sign out</Button>
         ) : (
           <>
-            <Button onClick={() => navigate('/login')}>Sign in</Button>
-            <Button onClick={() => navigate('/signup')}>Sign up</Button>
+            <Button variant="outlined" onClick={() => navigate('/login')}>Sign in</Button>
+            <Button variant="outlined" onClick={() => navigate('/signup')}>Sign up</Button>
           </>
         )}
         {admin ? (
-          <Button onClick={() => navigate('/admin')}>Admin page</Button>
+          <Button variant="outlined" onClick={() => navigate('/admin')}>Admin page</Button>
         ) : 
           null
         }
       
-        )
-      }
+        
         <Search />
       </Stack>
     </AppBar>
