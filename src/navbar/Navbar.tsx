@@ -1,36 +1,36 @@
-import { useState, useEffect } from 'react';
-import { auth } from '../firebase';
-import { onAuthStateChanged, signInWithEmailAndPassword, signOut } from 'firebase/auth';
-import { Link, useNavigate } from 'react-router-dom';
-import logo from "../assets/Logo_ibdb.png"
-import { Button } from '@mui/material';
+import { useState, useEffect } from "react";
+import { auth } from "../firebase";
+import { onAuthStateChanged, signInWithEmailAndPassword, signOut } from "firebase/auth";
+import { Link, useNavigate } from "react-router-dom";
+import logo from "../assets/Logo_ibdb.png";
+import { Button } from "@mui/material";
 import * as React from "react";
 import AppBar from "@mui/material/AppBar";
 import { Stack } from "@mui/system";
-import Search from "./components/Search"
-import { useDispatch } from 'react-redux';
-import { setUserData } from '../redux/userData';
+import Search from "./components/Search";
+import { useDispatch } from "react-redux";
+import { setUserData } from "../redux/userData";
 
 function Navbar() {
   const [user, setUser] = useState(null);
-  const [admin, setAdmin] = useState(false)
-  const navigate = useNavigate()
+  const [admin, setAdmin] = useState(false);
+  const navigate = useNavigate();
   const dispatch = useDispatch();
 
   function logOut(auth) {
     signOut(auth);
     setAdmin(false);
-    navigate("/login")
-  };
+    navigate("/login");
+  }
 
   useEffect(() => {
     const unsubscribe = onAuthStateChanged(auth, (user) => {
-      if (auth.currentUser?.uid == "kdoILYYTDuWy1izQOTauJxP2rDw1") { //check if its the admins user id
-        setAdmin(true)
-      dispatch(setUserData({...user, isAdmin: true}))
+      if (auth.currentUser?.uid == "kdoILYYTDuWy1izQOTauJxP2rDw1") {
+        //check if its the admins user id
+        setAdmin(true);
+        dispatch(setUserData({ ...user, isAdmin: true }));
       } else {
-        dispatch(setUserData({...user, isAdmin: false}))
-
+        dispatch(setUserData({ ...user, isAdmin: false }));
       }
       setUser(user);
     });
@@ -65,22 +65,15 @@ function Navbar() {
           <Button onClick={() => logOut(auth)}>Sign out</Button>
         ) : (
           <>
-            <Button onClick={() => navigate('/login')}>Sign in</Button>
-            <Button onClick={() => navigate('/signup')}>Sign up</Button>
+            <Button onClick={() => navigate("/login")}>Sign in</Button>
+            <Button onClick={() => navigate("/signup")}>Sign up</Button>
           </>
         )}
-        {admin ? (
-          <Button onClick={() => navigate('/admin')}>Admin page</Button>
-        ) : 
-          null
-        }
-      
-        )
-      }
+        {admin ? <Button onClick={() => navigate("/admin")}>Admin page</Button> : null}
+
         <Search />
       </Stack>
     </AppBar>
   );
 }
 export default Navbar;
-
