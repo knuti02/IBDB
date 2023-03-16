@@ -10,11 +10,13 @@ import { db } from "../../firebase";
 import { Margin } from "@mui/icons-material";
 
 export default function BookDetail() {
+  const { userData } = useAuth();
+  console.log(userData)
   const location = useLocation();
   const [reviews, setReviews] = useState([]);
   useEffect(() => {
     const q = query(collection(db, "reviews"), where("book", "==", location.state.ISBN));
-
+    
   }, []);
 
   const { title, author, imageSource, description } = location.state;
@@ -23,7 +25,6 @@ export default function BookDetail() {
   let [buttonValue, setButtonValue] = useState(true);
   let [review, setReview] = useState("");
 
-  const { userData } = useAuth();
 
   console.log(userData);
 
@@ -48,6 +49,7 @@ export default function BookDetail() {
   const handleSubmit = async () => {
     try {
       await addDoc(collection(db, "reviews"), {
+        user: userData.uid,
         rating: ratingValue,
         reviewText: review,
         book: location.state.ISBN
