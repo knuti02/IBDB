@@ -4,6 +4,7 @@ import { TabPanel, TabContext, TabList, TabPanelClassKey } from "@mui/lab";
 import React, { useEffect, useState } from "react";
 import { useLocation } from "react-router-dom";
 import ReviewBox from "../../components/ReviewBox";
+import useAuth from "../../hooks/useAuth";
 
 export default function BookDetail() {
   const location = useLocation();
@@ -13,21 +14,25 @@ export default function BookDetail() {
   let [ratingValue, setRatingValue] = useState<number | null>(null);
   let [buttonValue, setButtonValue] = useState(true);
 
+  const { userData } = useAuth();
+
+  console.log(userData);
+
   const handleTabChange = () => {
     if (tabValue == "0") {
-      setTabValue("1")
+      setTabValue("1");
     } else {
-      setTabValue("0")
+      setTabValue("0");
     }
   };
 
   const handleRatingChange = (_: Event, value: number) => {
-    console.log(ratingValue)
+    console.log(ratingValue);
     setRatingValue(value);
     if (value == null) {
-      setButtonValue(true)
+      setButtonValue(true);
     } else {
-      setButtonValue(false)
+      setButtonValue(false);
     }
   };
 
