@@ -2,6 +2,8 @@ import React, { useState } from "react";
 import { Outlet } from "react-router-dom";
 import { Box, createTheme, responsiveFontSizes, ThemeProvider, useMediaQuery } from "@mui/material";
 import Navbar from "../navbar/Navbar";
+import { Provider } from "react-redux";
+import { store } from "../redux/store";
 
 export default function Root() {
   const [theme, settheme] = useState(false);
@@ -21,11 +23,20 @@ export default function Root() {
   // };
 
   return (
+<<<<<<< HEAD
     <ThemeProvider theme={darkTheme}>
       <Box bgcolor={theme ? "#3e3e42" : "#fffff"} width="100%" top={0} margin={0} height="100%">
         <Navbar theme={theme} settheme={settheme} />
         <Outlet />
       </Box>
     </ThemeProvider>
+=======
+    <Provider store={store}>
+      <Box width="100%" top={0} margin={0} height="100%">
+        <Navbar />
+        <Outlet />
+      </Box>
+    </Provider>
+>>>>>>> main
   );
 }

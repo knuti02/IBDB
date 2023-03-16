@@ -8,13 +8,16 @@ import * as React from "react";
 import AppBar from "@mui/material/AppBar";
 import { Stack } from "@mui/system";
 import Search from "./components/Search";
+import { useDispatch } from "react-redux";
+import { setUserData } from "../redux/userData";;
 
 function Navbar(props) {
   const { theme, settheme } = props;
 
   const [user, setUser] = useState(null);
-  const [admin, setAdmin] = useState(false);
-  const navigate = useNavigate();
+  const [admin, setAdmin] = useState(false);;
+  const navigate = useNavigate();;
+  const dispatch = useDispatch();
 
   function logOut(auth) {
     signOut(auth);
@@ -30,6 +33,9 @@ function Navbar(props) {
       if (auth.currentUser?.uid == "kdoILYYTDuWy1izQOTauJxP2rDw1") {
         //check if its the admins user id
         setAdmin(true);
+        dispatch(setUserData({ ...user, isAdmin: true }));
+      } else {
+        dispatch(setUserData({ ...user, isAdmin: false }));
       }
       setUser(user);
     });
@@ -66,8 +72,17 @@ function Navbar(props) {
           <Button variant="outlined" onClick={() => logOut(auth)}>
             Sign out
           </Button>
+          <Button variant="outlined" onClick={() => logOut(auth)}>
+            Sign out
+          </Button>
         ) : (
           <>
+            <Button variant="outlined" onClick={() => navigate("/login")}>
+              Sign in
+            </Button>
+            <Button variant="outlined" onClick={() => navigate("/signup")}>
+              Sign up
+            </Button>
             <Button variant="outlined" onClick={() => navigate("/login")}>
               Sign in
             </Button>
@@ -77,6 +92,11 @@ function Navbar(props) {
           </>
         )}
         {admin ? (
+          <Button variant="outlined" onClick={() => navigate("/admin")}>
+            Admin page
+          </Button>
+        ) : null}
+
           <Button variant="outlined" onClick={() => navigate("/admin")}>
             Admin page
           </Button>
