@@ -64,12 +64,9 @@ function Navbar() {
         )}
         {admin ? (
           <Button onClick={() => navigate('/admin')}>Admin page</Button>
-        ) : 
+        ) : (
           null
-        }
-      
-        )
-      }
+        )} 
         <Search />
       </Stack>
     </AppBar>
