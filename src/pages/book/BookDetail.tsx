@@ -5,18 +5,29 @@ import React, { useEffect, useState } from "react";
 import { useLocation } from "react-router-dom";
 import ReviewBox from "../../components/ReviewBox";
 import useAuth from "../../hooks/useAuth";
-import { collection, addDoc, query, where } from "firebase/firestore";
+import { collection, addDoc, query, where, getDocs } from "firebase/firestore";
 import { db } from "../../firebase";
 import { Margin } from "@mui/icons-material";
+import { getAuth } from "firebase/auth";
+import { Review } from "../../types/Review";
 
 export default function BookDetail() {
   const { userData } = useAuth();
-  console.log(userData)
   const location = useLocation();
-  const [reviews, setReviews] = useState([]);
+  const [reviews, setReviews] = useState<Review[]>([]);
+  const auth = getAuth();
+  
   useEffect(() => {
-    const q = query(collection(db, "reviews"), where("book", "==", location.state.ISBN));
-    
+    const getInitialData = async () => {
+      let reviewData: Review[] = [];
+      const q = query(collection(db, "reviews"), where("book", "==", location.state.ISBN));
+      const querySnapshot = await getDocs(q);
+      querySnapshot.forEach((doc) => {
+        reviewData.push(doc.data() as Review)
+      });
+      setReviews(reviewData);
+    }
+    getInitialData();
   }, []);
 
   const { title, author, imageSource, description } = location.state;
@@ -50,6 +61,7 @@ export default function BookDetail() {
     try {
       await addDoc(collection(db, "reviews"), {
         user: userData.uid,
+        email: userData.email,
         rating: ratingValue,
         reviewText: review,
         book: location.state.ISBN
@@ -106,10 +118,15 @@ export default function BookDetail() {
             <ReviewBox userName={"Kjetil"} rating={3} text="Jeg likte boken" />
           </TabPanel>
           <TabPanel value="1">
-            <ReviewBox userName={"Armands"} rating={1} text="Jeg hater boken" />
-            <ReviewBox userName={"Tirza"} rating={2} text="Jeg likte ikke boken" />
-            <ReviewBox userName={"Lukas"} rating={5} text="Grov bok as" />
-            <ReviewBox userName={"Knut"} rating={5} text="Fin bok" />
+          {reviews && reviews.map((rev : Review) => {
+                return (
+                    <ReviewBox
+                    userName={rev.email}
+                    rating={rev.rating}
+                    text={rev.reviewText}
+                    />
+                );
+                })}
           </TabPanel>
         </TabContext>
       </Stack>
