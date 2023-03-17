@@ -1,11 +1,11 @@
 import { configureStore } from "@reduxjs/toolkit";
 import userDataReducer from "./userData";
-import userItems from "./userItems";
+import darkmode from "./darkmode";
 
 export const store = configureStore({
   reducer: {
     userData: userDataReducer,
-    userItems: userItems,
+    darkmode: darkmode,
   },
   middleware: (getDefaultMiddleware) =>
     getDefaultMiddleware({

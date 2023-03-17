@@ -5,6 +5,7 @@ import React, { useEffect, useState } from "react";
 import { useLocation } from "react-router-dom";
 import ReviewBox from "../../components/ReviewBox";
 import useAuth from "../../hooks/useAuth";
+import { useSelector } from "react-redux";
 
 export default function BookDetail() {
   const location = useLocation();
@@ -13,6 +14,8 @@ export default function BookDetail() {
   let [tabValue, setTabValue] = useState("0");
   let [ratingValue, setRatingValue] = useState<number | null>(null);
   let [buttonValue, setButtonValue] = useState(true);
+
+  const darkmode = useSelector((state) => state.darkmode.value);
 
   const { userData } = useAuth();
 
@@ -37,17 +40,21 @@ export default function BookDetail() {
   };
 
   return (
-    <Box boxShadow={4} p="16px">
-      <Stack width="100%" height="720px" alignItems="center">
+    <Box boxShadow={4} p="16px" bgcolor={darkmode ? "#3e3e42" : "#fffff"}>
+      <Stack width="100%" height="1920px" alignItems="center" bgcolor={darkmode ? "#3e3e42" : "#fffff"}>
         <Stack direction="row" alignItems="center" spacing={2} justifyContent="content">
           <img height="500px" src={imageSource} alt="ops" />
           <Stack justifyContent="space-evenly" alignItems="center" width="600px" direction="column" height="500px">
             <Stack justifyContent="center">
-              <Typography fontWeight="bold" variant="h3">
+              <Typography color={darkmode ? "white" : "black"} fontWeight="bold" variant="h3">
                 {title}
               </Typography>
-              <Typography variant="h4">{author}</Typography>
-              <Typography variant="body1">{description}</Typography>
+              <Typography color={darkmode ? "white" : "black"} variant="h4">
+                {author}
+              </Typography>
+              <Typography color={darkmode ? "white" : "black"} variant="body1">
+                {description}
+              </Typography>
             </Stack>
           </Stack>
         </Stack>

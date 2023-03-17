@@ -3,20 +3,21 @@ import { auth } from "../firebase";
 import { onAuthStateChanged, signInWithEmailAndPassword, signOut } from "firebase/auth";
 import { Link, useNavigate } from "react-router-dom";
 import logo from "../assets/Logo_ibdb.png";
-import { Button, Switch } from "@mui/material";
+import { Button, Switch, Typography } from "@mui/material";
 import * as React from "react";
 import AppBar from "@mui/material/AppBar";
 import { Stack } from "@mui/system";
 import Search from "./components/Search";
 import { useDispatch } from "react-redux";
-import { setUserData } from "../redux/userData";;
+import { setUserData } from "../redux/userData";
+import { setDarkmode } from "../redux/darkmode";
 
 function Navbar(props) {
   const { theme, settheme } = props;
 
   const [user, setUser] = useState(null);
-  const [admin, setAdmin] = useState(false);;
-  const navigate = useNavigate();;
+  const [admin, setAdmin] = useState(false);
+  const navigate = useNavigate();
   const dispatch = useDispatch();
 
   function logOut(auth) {
@@ -25,6 +26,7 @@ function Navbar(props) {
     navigate("/login");
   }
   const handleChange = (event) => {
+    dispatch(setDarkmode(theme ? false : true));
     settheme(event.target.checked);
   };
 
@@ -69,25 +71,18 @@ function Navbar(props) {
         </Link>
         <Switch checked={theme} color="success" onChange={handleChange} />
         {user ? (
-          <Button variant="outlined" onClick={() => logOut(auth)}>
-            Sign out
-          </Button>
-          <Button variant="outlined" onClick={() => logOut(auth)}>
-            Sign out
-          </Button>
+          <>
+            <Button variant="contained" onClick={() => logOut(auth)}>
+              Sign out
+            </Button>
+          </>
         ) : (
           <>
-            <Button variant="outlined" onClick={() => navigate("/login")}>
-              Sign in
-            </Button>
-            <Button variant="outlined" onClick={() => navigate("/signup")}>
+            <Button variant="contained" onClick={() => navigate("/signup")}>
               Sign up
             </Button>
-            <Button variant="outlined" onClick={() => navigate("/login")}>
+            <Button variant="contained" onClick={() => navigate("/login")}>
               Sign in
-            </Button>
-            <Button variant="outlined" onClick={() => navigate("/signup")}>
-              Sign up
             </Button>
           </>
         )}
@@ -96,12 +91,6 @@ function Navbar(props) {
             Admin page
           </Button>
         ) : null}
-
-          <Button variant="outlined" onClick={() => navigate("/admin")}>
-            Admin page
-          </Button>
-        ) : null}
-
         <Search />
       </Stack>
     </AppBar>
