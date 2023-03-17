@@ -3,14 +3,16 @@ import { auth } from "../firebase";
 import { onAuthStateChanged, signInWithEmailAndPassword, signOut } from "firebase/auth";
 import { Link, useNavigate } from "react-router-dom";
 import logo from "../assets/Logo_ibdb.png";
-import { Button, Switch, Typography } from "@mui/material";
+import { Button, Icon, Switch, Typography } from "@mui/material";
 import * as React from "react";
 import AppBar from "@mui/material/AppBar";
 import { Stack } from "@mui/system";
 import Search from "./components/Search";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { setUserData } from "../redux/userData";
 import { setDarkmode } from "../redux/darkmode";
+import NightlightIcon from "@mui/icons-material/Nightlight";
+import WbSunny from "@mui/icons-material/WbSunny";
 
 function Navbar(props) {
   const { theme, settheme } = props;
@@ -19,6 +21,7 @@ function Navbar(props) {
   const [admin, setAdmin] = useState(false);
   const navigate = useNavigate();
   const dispatch = useDispatch();
+  const darkmode = useSelector((state) => state.darkmode.value);
 
   function logOut(auth) {
     signOut(auth);
@@ -69,7 +72,10 @@ function Navbar(props) {
         >
           <img src={logo} alt="error under lasting av logo" width="100px" />
         </Link>
-        <Switch checked={theme} color="success" onChange={handleChange} />
+        <Stack direction="row" alignItems="center">
+          {darkmode ? <NightlightIcon /> : <WbSunny />}
+          <Switch checked={theme} color="success" onChange={handleChange} />
+        </Stack>
         {user ? (
           <>
             <Button variant="contained" onClick={() => logOut(auth)}>
