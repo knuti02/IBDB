@@ -1,11 +1,12 @@
 import React, { useState } from "react";
 import { createUserWithEmailAndPassword } from "firebase/auth";
-import { auth } from "../firebase";
-import TextField from "@mui/material/TextField";
-import Button from "@mui/material/Button";
-import Stack from "@mui/material/Stack";
-import styled from "@emotion/styled";
-import { Box } from "@mui/material";
+import { auth, db } from "../firebase";
+import TextField from '@mui/material/TextField';
+import Button from '@mui/material/Button';
+import Stack from '@mui/material/Stack';
+import styled from '@emotion/styled';
+import { Box } from '@mui/material';
+import { addDoc, collection, collectionGroup, doc, setDoc } from "firebase/firestore";
 import { useSelector } from "react-redux";
 
 const Form = styled(Stack)`
@@ -32,23 +33,29 @@ const SignUpPage = () => {
   const [status, setStatus] = useState("");
   const [inputValid, setInputValid] = useState(true);
 
-  const darkmode = useSelector((state) => state.darkmode.value);
+  const darkmode = useSelector(state => state.darkmode.value);
 
+  // Legger til bruker i firebase authentication
   const addUser = async () => {
     if (validateInput()) {
       setInputValid(true);
       createUserWithEmailAndPassword(auth, email, password)
-        .then((userCredential) => {
-          setStatus("Bruker lagt til");
+        .then(async (userCredential) => {
           const user = userCredential.user;
-          // ...
+          // ----  Legge til bruker i firestore med admin og verified
+          // Lager ref
+          const userColRef = doc(db, "users", user.uid);
+          await setDoc(userColRef, {
+            admin: false,
+            verified: false,
+          }).then(() => {
+            setStatus("Bruker lagt til");
+          });
         })
         .catch((error) => {
           const errorCode = error.code;
           const errorMessage = error.message;
           setStatus("Noe gikk galt:(");
-
-          // ..
         });
     } else {
       setInputValid(false);
@@ -118,6 +125,7 @@ const SignUpPage = () => {
       </Box>
     </Box>
   );
+};
 };
 
 export default SignUpPage;
