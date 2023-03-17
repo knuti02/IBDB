@@ -1,11 +1,11 @@
 import React, { useState } from "react";
 import { createUserWithEmailAndPassword } from "firebase/auth";
 import { auth, db } from "../firebase";
-import TextField from '@mui/material/TextField';
-import Button from '@mui/material/Button';
-import Stack from '@mui/material/Stack';
-import styled from '@emotion/styled';
-import { Box } from '@mui/material';
+import TextField from "@mui/material/TextField";
+import Button from "@mui/material/Button";
+import Stack from "@mui/material/Stack";
+import styled from "@emotion/styled";
+import { Box } from "@mui/material";
 import { addDoc, collection, collectionGroup, doc, setDoc } from "firebase/firestore";
 import { useSelector } from "react-redux";
 
@@ -33,7 +33,7 @@ const SignUpPage = () => {
   const [status, setStatus] = useState("");
   const [inputValid, setInputValid] = useState(true);
 
-  const darkmode = useSelector(state => state.darkmode.value);
+  const darkmode = useSelector((state) => state.darkmode.value);
 
   // Legger til bruker i firebase authentication
   const addUser = async () => {
@@ -125,7 +125,6 @@ const SignUpPage = () => {
       </Box>
     </Box>
   );
-};
 };
 
 export default SignUpPage;

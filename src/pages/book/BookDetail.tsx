@@ -137,10 +137,9 @@ export default function BookDetail() {
             Submit
           </Button>
         </FormControl>
-
         <TabContext value={String(tabValue)}>
           <Box sx={{ borderBottom: 1, borderColor: "divider" }}>
-            <TabList onChange={handleTabChange}>
+            <TabList onChange={handleTabChange} indicatorColor="primary" textColor={"secondary"}>
               <Tab label="Verified reviews" value="0" />
               <Tab label="User reviews" value="1" />
             </TabList>
