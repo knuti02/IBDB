@@ -5,7 +5,7 @@ import React, { useEffect, useState } from "react";
 import { useLocation } from "react-router-dom";
 import ReviewBox from "../../components/ReviewBox";
 import useAuth from "../../hooks/useAuth";
-import { collection, addDoc, query, where, getDocs } from "firebase/firestore";
+import { collection, addDoc, query, where, getDocs, doc, getDoc } from "firebase/firestore";
 import { db } from "../../firebase";
 import { Margin } from "@mui/icons-material";
 import { getAuth } from "firebase/auth";
@@ -15,18 +15,37 @@ export default function BookDetail() {
   const { userData } = useAuth();
   const location = useLocation();
   const [reviews, setReviews] = useState<Review[]>([]);
+  const [verifiedReviews, setVerifiedReviews] = useState<Review[]>([]);
   const auth = getAuth();
-  
+
   useEffect(() => {
     const getInitialData = async () => {
       let reviewData: Review[] = [];
+      let verifiedReviewData: Review[] = [];
       const q = query(collection(db, "reviews"), where("book", "==", location.state.ISBN));
       const querySnapshot = await getDocs(q);
-      querySnapshot.forEach((doc) => {
-        reviewData.push(doc.data() as Review)
+      querySnapshot.forEach(async (docParam) => {
+        // Ref to the reviewers user document
+        const userRef = doc(db, "users", docParam.data().user);
+        let isVerified = false;
+
+        // Get the reviewers users document
+        await getDoc(userRef).then((userDoc) => {
+          if (userDoc.exists()) {
+            // Is the user verified?
+            isVerified = userDoc.data().verified;
+          }
+        });
+        // Add the review to verified list if user is verified
+        if (isVerified) {
+          verifiedReviewData.push(docParam.data() as Review);
+        } else {
+          reviewData.push(docParam.data() as Review);
+        }
+        setReviews(reviewData);
+        setVerifiedReviews(verifiedReviewData);
       });
-      setReviews(reviewData);
-    }
+    };
     getInitialData();
   }, []);
 
@@ -35,9 +54,6 @@ export default function BookDetail() {
   let [ratingValue, setRatingValue] = useState<number | null>(null);
   let [buttonValue, setButtonValue] = useState(true);
   let [review, setReview] = useState("");
-
-
-  console.log(userData);
 
   const handleTabChange = () => {
     if (tabValue == "0") {
@@ -48,7 +64,6 @@ export default function BookDetail() {
   };
 
   const handleRatingChange = (_: Event, value: number) => {
-    console.log(ratingValue);
     setRatingValue(value);
     if (value == null) {
       setButtonValue(true);
@@ -64,7 +79,7 @@ export default function BookDetail() {
         email: userData.email,
         rating: ratingValue,
         reviewText: review,
-        book: location.state.ISBN
+        book: location.state.ISBN,
       });
       setReview("");
       setRatingValue(null);
@@ -73,8 +88,6 @@ export default function BookDetail() {
       console.log(error);
     }
   };
-
-
 
   return (
     <Box boxShadow={4} p="16px">
@@ -93,16 +106,29 @@ export default function BookDetail() {
         </Stack>
 
         <FormControl>
-          <Rating size="large" name="bookRating" value={ratingValue} onChange={handleRatingChange} />
-          <TextareaAutosize 
-            minRows={4} 
-            style={{ width: 550 }} 
-            aria-label="Book review" 
-            placeholder="Review..." 
+          <Rating
+            size="large"
+            name="bookRating"
+            value={ratingValue}
+            onChange={handleRatingChange}
+            disabled={auth.currentUser == null}
+          />
+          <TextareaAutosize
+            minRows={4}
+            style={{ width: 550 }}
+            aria-label="Book review"
+            placeholder="Review..."
             value={review}
             onChange={(e) => setReview(e.currentTarget.value)}
-            />
-          <Button disabled={buttonValue} variant="outlined" sx={{marginTop:"10px", width:"30%", marginLeft:"auto", marginRight:"auto"}} onClick={handleSubmit}>Submit</Button>
+          />
+          <Button
+            disabled={buttonValue}
+            variant="outlined"
+            sx={{ marginTop: "10px", width: "30%", marginLeft: "auto", marginRight: "auto" }}
+            onClick={handleSubmit}
+          >
+            Submit
+          </Button>
         </FormControl>
 
         <TabContext value={String(tabValue)}>
@@ -113,20 +139,16 @@ export default function BookDetail() {
             </TabList>
           </Box>
           <TabPanel value="0">
-            <ReviewBox userName={"Amalie"} rating={5} text="Jeg likte boken" />
-            <ReviewBox userName={"Erik"} rating={4} text="Fakker lowkey med boka as" />
-            <ReviewBox userName={"Kjetil"} rating={3} text="Jeg likte boken" />
+            {verifiedReviews &&
+              verifiedReviews.map((rev: Review) => {
+                return <ReviewBox userName={rev.email} rating={rev.rating} text={rev.reviewText} />;
+              })}
           </TabPanel>
           <TabPanel value="1">
-          {reviews && reviews.map((rev : Review) => {
-                return (
-                    <ReviewBox
-                    userName={rev.email}
-                    rating={rev.rating}
-                    text={rev.reviewText}
-                    />
-                );
-                })}
+            {reviews &&
+              reviews.map((rev: Review) => {
+                return <ReviewBox userName={rev.email} rating={rev.rating} text={rev.reviewText} />;
+              })}
           </TabPanel>
         </TabContext>
       </Stack>
