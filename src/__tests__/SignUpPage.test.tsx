@@ -36,9 +36,11 @@ describe("SignUpPage", () => {
 
   it("Shouldnt add user because of no input", async () => {
     const { getByTestId, getByText } = render(
-      <MemoryRouter>
-        <SignUpPage />
-      </MemoryRouter>
+      <Provider store={store}>
+        <MemoryRouter>
+          <SignUpPage />
+        </MemoryRouter>
+      </Provider>
     );
     const emailInput = getByTestId("emailInputField");
     fireEvent.change(emailInput, { target: { value: "" } });
@@ -58,9 +60,11 @@ describe("SignUpPage", () => {
 
   it("Shouldnt add user because of wrong email", async () => {
     const { getByTestId, getByText } = render(
-      <MemoryRouter>
-        <SignUpPage />
-      </MemoryRouter>
+      <Provider store={store}>
+        <MemoryRouter>
+          <SignUpPage />
+        </MemoryRouter>
+      </Provider>
     );
     const emailInput = getByTestId("emailInputField");
     fireEvent.change(emailInput, { target: { value: "iamcool" } });
@@ -80,9 +84,11 @@ describe("SignUpPage", () => {
 
   it("Shouldnt add user because of wrong password", async () => {
     const { getByTestId, getByText } = render(
-      <MemoryRouter>
-        <SignUpPage />
-      </MemoryRouter>
+      <Provider store={store}>
+        <MemoryRouter>
+          <SignUpPage />
+        </MemoryRouter>
+      </Provider>
     );
     const emailInput = getByTestId("emailInputField");
     fireEvent.change(emailInput, { target: { value: "thisIsValid@email.com" } });
