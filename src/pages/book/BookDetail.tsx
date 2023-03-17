@@ -106,7 +106,13 @@ export default function BookDetail() {
         </Stack>
 
         <FormControl>
-          <Rating size="large" name="bookRating" value={ratingValue} onChange={handleRatingChange} />
+          <Rating
+            size="large"
+            name="bookRating"
+            value={ratingValue}
+            onChange={handleRatingChange}
+            disabled={auth.currentUser == null}
+          />
           <TextareaAutosize
             minRows={4}
             style={{ width: 550 }}
