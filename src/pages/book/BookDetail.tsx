@@ -11,12 +11,15 @@ import { db } from "../../firebase";
 import { Margin } from "@mui/icons-material";
 import { getAuth } from "firebase/auth";
 import { Review } from "../../types/Review";
+import StarIcon from "@mui/icons-material/Star";
 
 export default function BookDetail() {
   const { userData } = useAuth();
   const location = useLocation();
   const [reviews, setReviews] = useState<Review[]>([]);
   const [verifiedReviews, setVerifiedReviews] = useState<Review[]>([]);
+  const [verifiedAverage, setVerifiedAverage] = useState(0);
+  const [average, setAverage] = useState(0);
   const auth = getAuth();
 
   useEffect(() => {
@@ -29,7 +32,6 @@ export default function BookDetail() {
         // Ref to the reviewers user document
         const userRef = doc(db, "users", docParam.data().user);
         let isVerified = false;
-
         // Get the reviewers users document
         await getDoc(userRef).then((userDoc) => {
           if (userDoc.exists()) {
@@ -39,16 +41,29 @@ export default function BookDetail() {
         });
         // Add the review to verified list if user is verified
         if (isVerified) {
-          verifiedReviewData.push(docParam.data() as Review);
+          verifiedReviewData.push({ ...docParam.data(), reviewId: docParam.id } as Review);
+          setVerifiedReviews(verifiedReviewData);
         } else {
-          reviewData.push(docParam.data() as Review);
+          reviewData.push({ ...docParam.data(), reviewId: docParam.id } as Review);
+          setReviews(reviewData);
         }
-        setReviews(reviewData);
-        setVerifiedReviews(verifiedReviewData);
       });
     };
     getInitialData();
   }, []);
+  // Dette er veldig stygt, men det funker tror jeg
+  useEffect(() => {
+    var verifiedReviewTotal = 0;
+    for (let i = 0; i < verifiedReviews.length; i++) {
+      verifiedReviewTotal += verifiedReviews[i].rating;
+    }
+    setVerifiedAverage(Math.round((verifiedReviewTotal / verifiedReviews.length) * 10) / 10);
+    var reviewTotal = 0;
+    for (let i = 0; i < reviews.length; i++) {
+      reviewTotal += reviews[i].rating;
+    }
+    setAverage(Math.round((reviewTotal / reviews.length) * 10) / 10);
+  }, [reviews, verifiedReviews]);
 
   const { title, author, imageSource, description } = location.state;
   let [tabValue, setTabValue] = useState("0");
@@ -108,6 +123,9 @@ export default function BookDetail() {
               <Typography color={darkmode ? "white" : "black"} variant="body1">
                 {description}
               </Typography>
+              <Typography color={darkmode ? "white" : "black"} variant="h4">
+                Profesjonelle reviews: {verifiedAverage}, normie reviews: {average}
+              </Typography>
             </Stack>
           </Stack>
         </Stack>
@@ -147,17 +165,24 @@ export default function BookDetail() {
           <TabPanel value="0">
             {verifiedReviews &&
               verifiedReviews.map((rev: Review) => {
-                return <ReviewBox userName={rev.email} rating={rev.rating} text={rev.reviewText} />;
+                return (
+                  <ReviewBox reviewId={rev.reviewId} userName={rev.email} rating={rev.rating} text={rev.reviewText} />
+                );
               })}
           </TabPanel>
           <TabPanel value="1">
             {reviews &&
               reviews.map((rev: Review) => {
-                return <ReviewBox userName={rev.email} rating={rev.rating} text={rev.reviewText} />;
+                return (
+                  <ReviewBox reviewId={rev.reviewId} userName={rev.email} rating={rev.rating} text={rev.reviewText} />
+                );
               })}
           </TabPanel>
         </TabContext>
       </Stack>
     </Box>
   );
+}
+function floor(b: number): React.SetStateAction<number> {
+  throw new Error("Function not implemented.");
 }
