@@ -1,17 +1,12 @@
 import React from "react";
 import ReactDOM from "react-dom/client";
 import App from "./App";
-import {
-  createBrowserRouter,
-  createRoutesFromElements,
-  Route,
-  RouterProvider,
-} from "react-router-dom";
+import { createBrowserRouter, createRoutesFromElements, Route, RouterProvider } from "react-router-dom";
 import Root from "./pages/Root";
 import LandingPage from "./pages/home/LandingPage";
 import Admin from "./pages/admin/Admin";
 import BookDetail from "./pages/book/BookDetail";
-import Toplists from "./components/Toplists";
+import Toplists from "./pages/toplist/Toplists";
 
 const router = createBrowserRouter(
   createRoutesFromElements(

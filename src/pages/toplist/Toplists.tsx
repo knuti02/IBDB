@@ -1,7 +1,7 @@
 import { Stack } from "@mui/system";
 import React, { useEffect } from "react";
-import { Book } from "../types/Book";
-import GenreToplists from "./GenreToplists";
+import { Book } from "../../types/Book";
+import GenreToplists from "../../components/GenreToplists";
 
 export default function Toplists() {
   const [fetchData, setFetchData] = React.useState([]);
