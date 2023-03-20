@@ -14,21 +14,16 @@ export default function LandingPageBookList() {
   }, []);
 
   return (
-    <Stack
-      padding="16px"
-      justifyContent="center"
-      direction="row"
-      flexWrap="wrap"
-      gap={2}
-    >
+    <Stack padding="16px" justifyContent="center" direction="row" flexWrap="wrap" gap={2}>
       {books &&
         books.map((book: Book) => {
           return (
             <BookPreview
+              key={book.isbn_13}
               title={book.title}
               imageSource={book.coverURL}
               author={book.author.name}
-              ISBN={book.ISBN}
+              ISBN={book.isbn_13}
               description={book.description}
             />
           );

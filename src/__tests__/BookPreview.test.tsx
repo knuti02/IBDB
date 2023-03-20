@@ -3,13 +3,17 @@ import { render, screen } from "@testing-library/react";
 import { MemoryRouter } from "react-router-dom";
 
 import LandingPageBookList from "../components/LandingPageBookList";
+import { Provider } from "react-redux";
+import { store } from "../redux/store";
 
 describe("Test LandingPage component", () => {
   beforeEach(() => {
     render(
-      <MemoryRouter>
-        <LandingPageBookList />
-      </MemoryRouter>
+      <Provider store={store}>
+        <MemoryRouter>
+          <LandingPageBookList />
+        </MemoryRouter>
+      </Provider>
     );
   });
 
@@ -19,9 +23,7 @@ describe("Test LandingPage component", () => {
     const author = screen.getByText("Jordan B. Peterson");
     expect(author).toBeInTheDocument();
 
-    const title = screen.getByText(
-      "Mer enn bare orden - 12 nye regler for livet"
-    );
+    const title = screen.getByText("Mer enn bare orden - 12 nye regler for livet");
     expect(title).toBeInTheDocument();
 
     expect(images[images.length - 3]).toHaveAttribute(
@@ -39,10 +41,7 @@ describe("Test LandingPage component", () => {
     const title = screen.getByText("I dine sko");
     expect(title).toBeInTheDocument();
 
-    expect(images[images.length - 2]).toHaveAttribute(
-      "alt",
-      "Book cover for I dine sko"
-    );
+    expect(images[images.length - 2]).toHaveAttribute("alt", "Book cover for I dine sko");
   });
 
   it("Should render Bok3 with passed props", () => {
@@ -54,9 +53,6 @@ describe("Test LandingPage component", () => {
     const title = screen.getByText("Gjøkungen");
     expect(title).toBeInTheDocument();
 
-    expect(images[images.length - 1]).toHaveAttribute(
-      "alt",
-      "Book cover for Gjøkungen"
-    );
+    expect(images[images.length - 1]).toHaveAttribute("alt", "Book cover for Gjøkungen");
   });
 });

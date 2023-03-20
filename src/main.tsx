@@ -7,6 +7,9 @@ import LandingPage from "./pages/home/LandingPage";
 import Admin from "./pages/admin/Admin";
 import BookDetail from "./pages/book/BookDetail";
 import Toplists from "./pages/toplist/Toplists";
+import SignUpPage from "./components/SignUpPage";
+import LoginPage from "./components/LoginPage";
+import SearchResult from "./pages/search/SearchResult";
 
 const router = createBrowserRouter(
   createRoutesFromElements(
@@ -15,6 +18,9 @@ const router = createBrowserRouter(
       <Route path="/admin" element={<Admin />} />
       <Route path="/books/:id" element={<BookDetail />} />
       <Route path="/toplists" element={<Toplists />} />
+      <Route path="/signup" element={<SignUpPage />} />
+      <Route path="/login" element={<LoginPage />} />
+      <Route path="/search/:result" element={<SearchResult />} />
     </Route>
   )
 );

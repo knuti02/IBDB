@@ -4,13 +4,17 @@ import { fireEvent, render, screen, waitFor } from "@testing-library/react";
 import AddBook from "../components/AddBook";
 import App from "../App";
 import { MemoryRouter } from "react-router-dom";
+import { Provider } from "react-redux";
+import { store } from "../redux/store";
 
 describe("AddBook", () => {
   it("Renders input field and button", async () => {
     const { getByTestId, getByText } = render(
-      <MemoryRouter>
-        <AddBook />
-      </MemoryRouter>
+      <Provider store={store}>
+        <MemoryRouter>
+          <AddBook />
+        </MemoryRouter>
+      </Provider>
     );
     const bookInput = getByTestId("addBookInputField");
     fireEvent.change(bookInput, { target: { value: "9780131103627" } });
