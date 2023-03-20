@@ -9,8 +9,15 @@ import { Book } from "../../types/Book";
 export default function Search () {
     const navigate = useNavigate();
     const [searchInput, setSearchInput] = useState("");
-
+// treng me hele const Filterpage? idkkkkkk ahhahahaha. Ait for er bare litt forvirra over alle const[... ,set ...] - om me bruker alle liksom
     const booksRef = collection(db, "books");
+
+    const filterBooksByGenre = () => {
+        const filteredBooks = booksRef
+            .filter(book => book.subjects.some(subject => subject.toLowerCase() === searchInput.toLowerCase()))
+            .map((book) => ({ data: book }));  
+        return filteredBooks;
+      };
 
     const onSubmitSearch = async () => {
         if (searchInput === "" || searchInput === " ") {
@@ -19,8 +26,10 @@ export default function Search () {
         const inputLower = searchInput.toLowerCase();
         const qTitle = query(booksRef, where("titleLowerCase", ">=", inputLower), where("titleLowerCase", "<=", inputLower+ "\uf8ff"));
         const qAuthor = query(booksRef, where("author.nameLowerCase", ">=", inputLower), where("author.nameLowerCase", "<=", inputLower+ "\uf8ff"));
+        
         const querySnapshotTitle = await getDocs(qTitle);
         const querySnapshotAuthor = await getDocs(qAuthor);
+        
         const books:Array<Book> = [];
         querySnapshotTitle.forEach((doc) => {
             books.push(doc.data() as Book);
@@ -28,6 +37,13 @@ export default function Search () {
         querySnapshotAuthor.forEach((doc) => {
             books.push(doc.data() as Book);
         });
+        
+        const filteredBooks = filterBooksByGenre();
+        
+        filteredBooks.array.forEach((book) => {
+            books.push(book)
+        });
+
         setSearchInput("");
         navigate("/search/" + searchInput, {
             state: {
@@ -50,7 +66,7 @@ export default function Search () {
                 <SearchIcon fontSize="large"/>
             </IconButton>
             <TextField 
-                label="Søk på tittel eller forfatter"
+                label="Search on title, author or genre"
                 type="text"
                 value={searchInput}
                 onChange={(e) => setSearchInput(e.currentTarget.value)}

@@ -27,14 +27,17 @@
 
     const filterBooksByGenre = () => {
       if (books) {
-        console.log(books)
-        const filteredBooks = books.filter(book => book.subjects.includes(selectedGenre)).map((book) => ({ data: book }));
+        const filteredBooks = books
+          .filter(book => book.subjects.some(subject => subject.toLowerCase() === selectedGenre.toLowerCase()))
+          .map((book) => ({ data: book }));  
         setFilteredBooks(filteredBooks);
-        console.log(filteredBooks)
         setSearched(true);
-      }
+        
+        return filteredBooks;
+      } 
     };
-      
+    
+    
     return (
       <Box sx={{ width: '50%', margin: '0 auto' }}>
       
@@ -50,20 +53,26 @@
         </Button>
 
         <Stack spacing={2}>
-          {books && searched && filteredBooks.length === 0 && <div>No books found</div>}
-          {books && filteredBooks.map((book) => (  
-            <BookPreview
-              key={book.ISBN}
-              title={book.title}
-              imageSource={book.coverURL}
-              author={book.author.name}
-              ISBN={book.ISBN}
-              description={book.description}
-            />
-          ))}
-        </Stack>
-      </Box>
-    );
-  };
+        {books && searched && filteredBooks.length === 0 && <div>No books found</div>}
+        {books && filteredBooks.map((book) => {
+          try {
+            return (
+              <BookPreview
+                key={book.ISBN}
+                title={book.title}
+                imageSource={book.coverURL}
+                author={book.author ? book.author.name : ''}
+                ISBN={book.ISBN}
+                description={book.description}
+              />
+            );
+          } catch (error) {
+            console.error(`Error rendering book with ISBN ${book.ISBN}: `, error);
+          }
+        })}
+      </Stack>
+    </Box>
+  );
+};
 
   export default FilterPage;
