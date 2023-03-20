@@ -3,25 +3,35 @@ import { auth } from "../firebase";
 import { onAuthStateChanged, signInWithEmailAndPassword, signOut } from "firebase/auth";
 import { Link, useNavigate } from "react-router-dom";
 import logo from "../assets/Logo_ibdb.png";
-import { Button } from "@mui/material";
+import { Button, Icon, Switch, Typography } from "@mui/material";
 import * as React from "react";
 import AppBar from "@mui/material/AppBar";
 import { Stack } from "@mui/system";
 import Search from "./components/Search";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { setUserData } from "../redux/userData";
+import { setDarkmode } from "../redux/darkmode";
+import NightlightIcon from "@mui/icons-material/Nightlight";
+import WbSunny from "@mui/icons-material/WbSunny";
 
-function Navbar() {
+function Navbar(props) {
+  const { theme, settheme } = props;
+
   const [user, setUser] = useState(null);
   const [admin, setAdmin] = useState(false);
   const navigate = useNavigate();
   const dispatch = useDispatch();
+  const darkmode = useSelector((state) => state.darkmode.value);
 
   function logOut(auth) {
     signOut(auth);
     setAdmin(false);
     navigate("/login");
   }
+  const handleChange = (event) => {
+    dispatch(setDarkmode(theme ? false : true));
+    settheme(event.target.checked);
+  };
 
   useEffect(() => {
     const unsubscribe = onAuthStateChanged(auth, (user) => {
@@ -40,12 +50,13 @@ function Navbar() {
   return (
     <AppBar
       sx={{
-        color: "#FFFFFF",
-        backgroundColor: "#FFFFFF",
+        color: "palette.background.default",
+        backgroundColor: "palette.background.default",
       }}
       position="sticky"
     >
       <Stack
+        bgcolor="palette.background.default"
         marginLeft="10px"
         alignItems="center"
         justifyContent="space-between"
@@ -61,17 +72,23 @@ function Navbar() {
         >
           <img src={logo} alt="error under lasting av logo" width="100px" />
         </Link>
+        <Stack direction="row" alignItems="center">
+          {darkmode ? <NightlightIcon /> : <WbSunny />}
+          <Switch checked={theme} color="success" onChange={handleChange} />
+        </Stack>
         {user ? (
-          <Button variant="outlined" onClick={() => logOut(auth)}>
-            Sign out
-          </Button>
+          <>
+            <Button variant="contained" onClick={() => logOut(auth)}>
+              Sign out
+            </Button>
+          </>
         ) : (
           <>
-            <Button variant="outlined" onClick={() => navigate("/login")}>
-              Sign in
-            </Button>
-            <Button variant="outlined" onClick={() => navigate("/signup")}>
+            <Button variant="contained" onClick={() => navigate("/signup")}>
               Sign up
+            </Button>
+            <Button variant="contained" onClick={() => navigate("/login")}>
+              Sign in
             </Button>
           </>
         )}
@@ -80,7 +97,6 @@ function Navbar() {
             Admin page
           </Button>
         ) : null}
-
         <Search />
       </Stack>
     </AppBar>

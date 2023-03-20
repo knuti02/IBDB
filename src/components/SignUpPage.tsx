@@ -7,6 +7,7 @@ import Stack from "@mui/material/Stack";
 import styled from "@emotion/styled";
 import { Box } from "@mui/material";
 import { addDoc, collection, collectionGroup, doc, setDoc } from "firebase/firestore";
+import { useSelector } from "react-redux";
 
 const Form = styled(Stack)`
   padding: 16px;
@@ -31,6 +32,8 @@ const SignUpPage = () => {
   const [password, setPassword] = useState("");
   const [status, setStatus] = useState("");
   const [inputValid, setInputValid] = useState(true);
+
+  const darkmode = useSelector((state) => state.darkmode.value);
 
   // Legger til bruker i firebase authentication
   const addUser = async () => {
@@ -73,41 +76,53 @@ const SignUpPage = () => {
   };
 
   return (
-    <Box justifyContent="center" alignItems="center" width="100%" height="100%">
-      <Form justifyContent="center" alignItems="center" direction="row" spacing={2} border={1}>
+    <Box
+      justifyContent="center"
+      alignItems="center"
+      width="100%"
+      height="1920px"
+      bgcolor={darkmode ? "#3e3e42" : "#fffff"}
+    >
+      <Box bgcolor={darkmode ? "#3e3e42" : "#fffff"} zIndex={20}>
         <Stack justifyContent="center" alignItems="center">
-          <TextField
-            style={{ paddingBottom: "10px" }}
-            label="Email"
-            type="email"
-            inputProps={{ "data-testid": "emailInputField" }}
-            variant="outlined"
-            error={!inputValid}
-            helperText={!inputValid ? "Invalid email format" : ""}
-            fullWidth
-            value={email}
-            onChange={(e) => setEmail(e.currentTarget.value)}
-          />
-          <TextField
-            style={{ paddingBottom: "10px" }}
-            label="Password"
-            type="password"
-            inputProps={{ "data-testid": "passwordInputField" }}
-            variant="outlined"
-            error={!inputValid}
-            helperText={!inputValid ? "Password must be at least 8 characters" : ""}
-            fullWidth
-            value={password}
-            onChange={(p) => setPassword(p.currentTarget.value)}
-            onKeyDown={handleKeyDown}
-          />
-          <Button variant="contained" onClick={addUser}>
-            Add User
-          </Button>
-          {status.length > 0 &&
-            (status === "Bruker lagt til" ? <SuccessText>{status}</SuccessText> : <ErrorText>{status}</ErrorText>)}
+          <Box marginTop="16px">
+            <TextField
+              style={{
+                paddingBottom: "10px",
+              }}
+              sx={{ input: { backgroundColor: darkmode ? "black" : "white" } }}
+              label="Email"
+              type="email"
+              inputProps={{ "data-testid": "emailInputField" }}
+              variant="filled"
+              error={!inputValid}
+              helperText={!inputValid ? "Invalid email format" : ""}
+              fullWidth
+              value={email}
+              onChange={(e) => setEmail(e.currentTarget.value)}
+            />
+            <TextField
+              style={{ paddingBottom: "10px" }}
+              label="Password"
+              sx={{ input: { backgroundColor: darkmode ? "black" : "white" } }}
+              type="password"
+              inputProps={{ "data-testid": "passwordInputField" }}
+              variant="filled"
+              error={!inputValid}
+              helperText={!inputValid ? "Password must be at least 8 characters" : ""}
+              fullWidth
+              value={password}
+              onChange={(p) => setPassword(p.currentTarget.value)}
+              onKeyDown={handleKeyDown}
+            />
+            <Button variant="contained" onClick={addUser}>
+              Add User
+            </Button>
+            {status.length > 0 &&
+              (status === "Bruker lagt til" ? <SuccessText>{status}</SuccessText> : <ErrorText>{status}</ErrorText>)}
+          </Box>
         </Stack>
-      </Form>
+      </Box>
     </Box>
   );
 };

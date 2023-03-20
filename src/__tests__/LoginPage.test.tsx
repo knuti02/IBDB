@@ -4,19 +4,23 @@ import { fireEvent, render, screen, waitFor } from "@testing-library/react";
 import LoginPage from "../components/LoginPage";
 import App from "../App";
 import { MemoryRouter } from "react-router-dom";
+import { Provider } from "react-redux";
+import { store } from "../redux/store";
 
 describe("LoginPage", () => {
   it("Should should log in", async () => {
     const { getByTestId, getByText } = render(
-      <MemoryRouter>
-        <LoginPage />
-      </MemoryRouter>
+      <Provider store={store}>
+        <MemoryRouter>
+          <LoginPage />
+        </MemoryRouter>
+      </Provider>
     );
 
     const emailInput = getByTestId("emailInputField");
     fireEvent.change(emailInput, { target: { value: "test1@gmail.com" } });
     const passwordInput = getByTestId("passwordInputField");
-    fireEvent.change(passwordInput, { target: { value: "Passord123" } })
+    fireEvent.change(passwordInput, { target: { value: "Passord123" } });
     const btn = screen.getByRole("button");
     fireEvent.click(btn);
     await waitFor(
@@ -31,15 +35,17 @@ describe("LoginPage", () => {
 
   it("Should should not log in", async () => {
     const { getByTestId, getByText } = render(
-      <MemoryRouter>
-        <LoginPage />
-      </MemoryRouter>
+      <Provider store={store}>
+        <MemoryRouter>
+          <LoginPage />
+        </MemoryRouter>
+      </Provider>
     );
 
     const emailInput = getByTestId("emailInputField");
     fireEvent.change(emailInput, { target: { value: "test1@gmail.com" } });
     const passwordInput = getByTestId("passwordInputField");
-    fireEvent.change(passwordInput, { target: { value: "" } })
+    fireEvent.change(passwordInput, { target: { value: "" } });
     const btn = screen.getByRole("button");
     fireEvent.click(btn);
     await waitFor(
@@ -51,4 +57,4 @@ describe("LoginPage", () => {
 
     screen.debug();
   });
-}, 20000)
+}, 20000);
