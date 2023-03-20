@@ -41,10 +41,10 @@ export default function BookDetail() {
         });
         // Add the review to verified list if user is verified
         if (isVerified) {
-          verifiedReviewData.push(docParam.data() as Review);
+          verifiedReviewData.push({ ...docParam.data(), reviewId: docParam.id } as Review);
           setVerifiedReviews(verifiedReviewData);
         } else {
-          reviewData.push(docParam.data() as Review);
+          reviewData.push({ ...docParam.data(), reviewId: docParam.id } as Review);
           setReviews(reviewData);
         }
       });
@@ -165,13 +165,17 @@ export default function BookDetail() {
           <TabPanel value="0">
             {verifiedReviews &&
               verifiedReviews.map((rev: Review) => {
-                return <ReviewBox userName={rev.email} rating={rev.rating} text={rev.reviewText} />;
+                return (
+                  <ReviewBox reviewId={rev.reviewId} userName={rev.email} rating={rev.rating} text={rev.reviewText} />
+                );
               })}
           </TabPanel>
           <TabPanel value="1">
             {reviews &&
               reviews.map((rev: Review) => {
-                return <ReviewBox userName={rev.email} rating={rev.rating} text={rev.reviewText} />;
+                return (
+                  <ReviewBox reviewId={rev.reviewId} userName={rev.email} rating={rev.rating} text={rev.reviewText} />
+                );
               })}
           </TabPanel>
         </TabContext>

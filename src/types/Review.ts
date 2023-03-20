@@ -1,7 +1,8 @@
 export type Review = {
-    book: string;
-    email: string;
-    user: string;
-    rating: number;
-    reviewText: string;
-}
+  book: string;
+  email: string;
+  user: string;
+  rating: number;
+  reviewText: string;
+  reviewId: string;
+};
