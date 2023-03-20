@@ -11,12 +11,15 @@ import { db } from "../../firebase";
 import { Margin } from "@mui/icons-material";
 import { getAuth } from "firebase/auth";
 import { Review } from "../../types/Review";
+import StarIcon from '@mui/icons-material/Star';
 
 export default function BookDetail() {
   const { userData } = useAuth();
   const location = useLocation();
   const [reviews, setReviews] = useState<Review[]>([]);
   const [verifiedReviews, setVerifiedReviews] = useState<Review[]>([]);
+  const [verifiedAverage, setVerifiedAverage] = useState(0)
+  const [average, setAverage] = useState(0)
   const auth = getAuth();
 
   useEffect(() => {
@@ -49,6 +52,18 @@ export default function BookDetail() {
     };
     getInitialData();
   }, []);
+  // Dette er veldig stygt, men det funker tror jeg
+  let verifiedReviewTotal = 0
+  for (let i = 0; i < verifiedReviews.length; i++) {
+    verifiedReviewTotal += verifiedReviews[i].rating
+  }
+  let a = Math.round(verifiedReviewTotal/verifiedReviews.length * 10) / 10
+  
+  let reviewTotal = 0
+  for (let i = 0; i < reviews.length; i++) {
+    reviewTotal += reviews[i].rating
+  }
+  let b = Math.round(reviewTotal/reviews.length * 10) / 10
 
   const { title, author, imageSource, description } = location.state;
   let [tabValue, setTabValue] = useState("0");
@@ -108,6 +123,7 @@ export default function BookDetail() {
               <Typography color={darkmode ? "white" : "black"} variant="body1">
                 {description}
               </Typography>
+              <Typography color={darkmode ? "white" : "black"} variant="h4">Profesjonelle reviews: {a}, normie reviews: {b}</Typography>
             </Stack>
           </Stack>
         </Stack>
@@ -161,3 +177,7 @@ export default function BookDetail() {
     </Box>
   );
 }
+function floor(b: number): React.SetStateAction<number> {
+  throw new Error("Function not implemented.");
+}
+
