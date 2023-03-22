@@ -148,7 +148,7 @@ export default function BookDetail() {
           />
           <Button
             disabled={buttonValue}
-            variant="outlined"
+            variant="contained"
             sx={{ marginTop: "10px", width: "30%", marginLeft: "auto", marginRight: "auto" }}
             onClick={handleSubmit}
           >

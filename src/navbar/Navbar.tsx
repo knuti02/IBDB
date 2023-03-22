@@ -93,7 +93,7 @@ function Navbar(props) {
           </>
         )}
         {admin ? (
-          <Button variant="outlined" onClick={() => navigate("/admin")}>
+          <Button variant="contained" onClick={() => navigate("/admin")}>
             Admin page
           </Button>
         ) : null}
