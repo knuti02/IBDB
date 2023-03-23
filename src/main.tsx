@@ -9,9 +9,7 @@ import BookDetail from "./pages/book/BookDetail";
 import Toplists from "./pages/toplist/Toplists";
 import SignUpPage from "./components/SignUpPage";
 import LoginPage from "./components/LoginPage";
-import FilterPage from "./components/FilterByArgument";
 import SearchResult from "./pages/search/SearchResult";
-
 
 const router = createBrowserRouter(
   createRoutesFromElements(
@@ -23,7 +21,6 @@ const router = createBrowserRouter(
       <Route path="/signup" element={<SignUpPage />} />
       <Route path="/login" element={<LoginPage />} />
       <Route path="/search/:result" element={<SearchResult />} />
-      <Route path="/filter" element={<FilterPage />} />
     </Route>
   )
 );

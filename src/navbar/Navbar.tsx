@@ -86,7 +86,7 @@ function Navbar(props) {
           </Link>
           <Search />
         </Box>
-        <Box sx={{ display: "flex", alignItems: "center" }}>
+        <Box sx={{ display: "flex", alignItems: "center", gap: 1 }}>
           <Button variant="contained" onClick={() => navigate("/toplists")}>
             Topplister
           </Button>
@@ -95,14 +95,24 @@ function Navbar(props) {
             <Switch checked={theme} color="success" onChange={handleChange} />
           </Stack>
           {user ? (
-            <Button onClick={() => logOut(auth)}>Sign out</Button>
+            <Button variant="contained" onClick={() => logOut(auth)}>
+              Sign out
+            </Button>
           ) : (
             <>
-              <Button onClick={() => navigate("/login")}>Sign in</Button>
-              <Button onClick={() => navigate("/signup")}>Sign up</Button>
+              <Button variant="contained" onClick={() => navigate("/login")}>
+                Sign in
+              </Button>
+              <Button variant="contained" onClick={() => navigate("/signup")}>
+                Sign up
+              </Button>
             </>
           )}
-          {admin ? <Button onClick={() => navigate("/admin")}>Admin page</Button> : null}
+          {admin ? (
+            <Button variant="contained" onClick={() => navigate("/admin")}>
+              Admin page
+            </Button>
+          ) : null}
         </Box>
       </Stack>
     </AppBar>
