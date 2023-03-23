@@ -72,6 +72,9 @@ function Navbar(props) {
         >
           <img src={logo} alt="error under lasting av logo" width="100px" />
         </Link>
+        <Button variant="contained" onClick={() => navigate("/toplists")}>
+          Topplister
+        </Button>
         <Stack direction="row" alignItems="center">
           {darkmode ? <NightlightIcon /> : <WbSunny />}
           <Switch checked={theme} color="success" onChange={handleChange} />
