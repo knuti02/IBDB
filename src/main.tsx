@@ -1,16 +1,12 @@
 import React from "react";
 import ReactDOM from "react-dom/client";
 import App from "./App";
-import {
-  createBrowserRouter,
-  createRoutesFromElements,
-  Route,
-  RouterProvider,
-} from "react-router-dom";
+import { createBrowserRouter, createRoutesFromElements, Route, RouterProvider } from "react-router-dom";
 import Root from "./pages/Root";
 import LandingPage from "./pages/home/LandingPage";
 import Admin from "./pages/admin/Admin";
 import BookDetail from "./pages/book/BookDetail";
+import Toplists from "./pages/toplist/Toplists";
 import SignUpPage from "./components/SignUpPage";
 import LoginPage from "./components/LoginPage";
 import FilterPage from "./components/FilterByArgument";
@@ -23,8 +19,9 @@ const router = createBrowserRouter(
       <Route index path="" element={<LandingPage />} />
       <Route path="/admin" element={<Admin />} />
       <Route path="/books/:id" element={<BookDetail />} />
+      <Route path="/toplists" element={<Toplists />} />
       <Route path="/signup" element={<SignUpPage />} />
-      <Route path="/login" element= {<LoginPage />} />
+      <Route path="/login" element={<LoginPage />} />
       <Route path="/search/:result" element={<SearchResult />} />
       <Route path="/filter" element={<FilterPage />} />
     </Route>

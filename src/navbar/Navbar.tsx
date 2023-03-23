@@ -1,32 +1,49 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect } from "react";
 import * as React from "react";
 
-import { auth } from '../firebase';
-import { onAuthStateChanged, signInWithEmailAndPassword, signOut } from 'firebase/auth';
-import { Link, useNavigate } from 'react-router-dom';
+import { auth } from "../firebase";
+import { onAuthStateChanged, signInWithEmailAndPassword, signOut } from "firebase/auth";
+import { Link, useNavigate } from "react-router-dom";
 
-import logo from "../assets/Logo_ibdb.png"
+import logo from "../assets/Logo_ibdb.png";
 
-import { Button, Box } from '@mui/material';
+import { Button, Box, Icon, Switch, Typography } from "@mui/material";
 import AppBar from "@mui/material/AppBar";
 import { Stack } from "@mui/system";
-import Search from "./components/Search"
+import Search from "./components/Search";
+import { useDispatch, useSelector } from "react-redux";
+import { setUserData } from "../redux/userData";
+import { setDarkmode } from "../redux/darkmode";
+import NightlightIcon from "@mui/icons-material/Nightlight";
+import WbSunny from "@mui/icons-material/WbSunny";
 
-function Navbar() {
+function Navbar(props) {
+  const { theme, settheme } = props;
+
   const [user, setUser] = useState(null);
-  const [admin, setAdmin] = useState(false)
-  const navigate = useNavigate()
+  const [admin, setAdmin] = useState(false);
+  const navigate = useNavigate();
+  const dispatch = useDispatch();
+  const darkmode = useSelector((state) => state.darkmode.value);
 
   function logOut(auth) {
     signOut(auth);
     setAdmin(false);
-    navigate("/login")
+    navigate("/login");
+  }
+  const handleChange = (event) => {
+    dispatch(setDarkmode(theme ? false : true));
+    settheme(event.target.checked);
   };
 
   useEffect(() => {
     const unsubscribe = onAuthStateChanged(auth, (user) => {
-      if (auth.currentUser?.uid == "kdoILYYTDuWy1izQOTauJxP2rDw1") { //check if its the admins user id
-        setAdmin(true)
+      if (auth.currentUser?.uid == "kdoILYYTDuWy1izQOTauJxP2rDw1") {
+        //check if its the admins user id
+        setAdmin(true);
+        dispatch(setUserData({ ...user, isAdmin: true }));
+      } else {
+        dispatch(setUserData({ ...user, isAdmin: false }));
       }
       setUser(user);
     });
@@ -36,12 +53,14 @@ function Navbar() {
   return (
     <AppBar
       sx={{
-        color: "#FFFFFF",
-        backgroundColor: "#FFFFFF",
+        color: "palette.background.default",
+        backgroundColor: "palette.background.default",
       }}
       position="sticky"
     >
       <Stack
+        bgcolor="palette.background.default"
+        marginLeft="10px"
         alignItems="center"
         justifyContent="space-between"
         direction={"row"}
@@ -68,6 +87,13 @@ function Navbar() {
           <Search />
         </Box>
         <Box sx={{ display: "flex", alignItems: "center" }}>
+          <Button variant="contained" onClick={() => navigate("/toplists")}>
+            Topplister
+          </Button>
+          <Stack direction="row" alignItems="center">
+            {darkmode ? <NightlightIcon /> : <WbSunny />}
+            <Switch checked={theme} color="success" onChange={handleChange} />
+          </Stack>
           {user ? (
             <Button onClick={() => logOut(auth)}>Sign out</Button>
           ) : (
@@ -76,14 +102,10 @@ function Navbar() {
               <Button onClick={() => navigate("/signup")}>Sign up</Button>
             </>
           )}
-          {admin ? (
-            <Button onClick={() => navigate("/admin")}>Admin page</Button>
-          ) : null}
+          {admin ? <Button onClick={() => navigate("/admin")}>Admin page</Button> : null}
         </Box>
       </Stack>
     </AppBar>
   );
-  
 }
 export default Navbar;
-
